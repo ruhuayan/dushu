@@ -1,4 +1,12 @@
 # dushu
+## python environment setup
+```
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install requirements.txt
+```
 
 ## Project setup
 ```
@@ -24,6 +32,3 @@ npm run test:unit
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
