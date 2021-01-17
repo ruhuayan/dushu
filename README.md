@@ -1,14 +1,14 @@
 # dushu
-## python environment setup
+## Python environment setup
 ```
 python3 -m venv venv
 
 source venv/bin/activate
 
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
-## Project setup
+## Frontend setup
 ```
 npm install
 ```

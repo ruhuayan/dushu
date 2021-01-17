@@ -2,8 +2,11 @@
 node_modules
 /dist
 
-
+#python
+venv/
+python/books.txt
 # local env files
+.env
 .env.local
 .env.*.local
 
