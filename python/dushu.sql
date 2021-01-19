@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    href VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    alphabet VARCHAR(1) NOT NULL,
+    description TEXT,
+    loaded BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)  ENGINE=INNODB;
+
+
+CREATE TABLE IF NOT EXISTS chapters (
+    chapter_id INT NOT NULL,
+    book_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (book_id, chapter_id),
+    FOREIGN KEY (book_id) REFERENCES books (id) ON UPDATE RESTRICT ON DELETE CASCADE
+)  ENGINE=INNODB;
