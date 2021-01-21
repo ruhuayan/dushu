@@ -20,3 +20,12 @@ CREATE TABLE IF NOT EXISTS chapters (
     PRIMARY KEY (book_id, chapter_id),
     FOREIGN KEY (book_id) REFERENCES books (id) ON UPDATE RESTRICT ON DELETE CASCADE
 )  ENGINE=INNODB;
+
+ALTER TABLE books CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE books DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE books CHANGE title title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+ALTER TABLE chapters CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE chapters DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE chapters CHANGE title title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE chapters CHANGE content content TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;

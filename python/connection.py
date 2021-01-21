@@ -7,28 +7,47 @@ class Connection:
         self._user = user
         self._password = password
         self._db = db
+        self.connection = None
 
     def connect(self):
         try:
-            with connect(
-                host = self._host,
-                user = self._user,
-                password = self._password,
-                database = self._db,
-            ) as connection:
-                self.connection = connection
-
+            self.connection = connect(
+                                        host = self._host,
+                                        user = self._user,
+                                        password = self._password,
+                                        database = self._db,
+                                    )
         except Error as e:
             print(e)
     
-    def exec(self, query: str):
+    def insert_books(self, records):
+        
         if not self.connection:
-            raise 'no connection exists'
+            print('No Connection')
+            return
+        if not self.connection.is_connected():
+            print('Not Connected to MySQL database')
+            return
         try:
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                connection.commit()
+            insert_books_query = """
+            INSERT INTO books
+            (title, href, author, category, alphabet)
+            VALUES ( %s, %s, %s, %s, %s)
+            """
+            with self.connection.cursor() as cursor:
+                cursor.executemany(insert_books_query, records)
+                self.connection.commit()
                 
         except Error as e:
             print(e)
+
+    def get_unloaded_books(self):
+        select_books_query = "SELECT * FROM books WHERE loaded = 0"
+        with self.connection.cursor() as cursor:
+            cursor.execute(select_books_query)
+            result = cursor.fetchall()
+            return result
+
+    def close(self):
+        self.connection.close()
 
