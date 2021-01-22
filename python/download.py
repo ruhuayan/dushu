@@ -2,24 +2,32 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from typing import List
-import json
 from ebook import Chapter, Ebook
+from dotenv import load_dotenv
+from connection import Connection
 
 class Download:
 
-    def __init__(self, url):
-        self.url = url
-        self.books = self.get_books()
+    def __init__(self, base_url):
+        self.base_url = base_url
+        self.db = Connection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), os.getenv('DB'))
 
-    def start(self, index = None):
-        book = self.get_book(index)
-        self._download(book)
+    def start(self):
+        while true:
+            book = self.get_book()
+            self._download(book)
 
-        while book['id'] <= len(self.books):
-            self.start(book['id'] - 1)
+            self.db.set_book_loaded(book['id'])
+
+    def get_book(self):
+        # get unloaded book from db
+        pass
+
+    def save_chapters(self, chapters):
+        pass
 
     def _download(self, book):
-        page_url = urljoin(self.ulr, book['href'])
+        page_url = urljoin(self.base_url, book['href'])
         page = requests.get(page_url)
         soup = BeautifulSoup(page.content, 'html.parser', from_encoding="gb18030")
 
@@ -45,27 +53,9 @@ class Download:
             chapter.set_content(chapter_content)
             ebook.add_chapter(chapter)
 
+        # to do - save chapter
+
         ebook.save()
-        book['loaded'] = True
-        self.save_books()
-
-    def get_books(self):
-        with open('books.txt', 'r', encoding='utf8') as f:
-            books = json.load(f)
-            return books
-    
-    def get_book(self, index = None):
-        if index:
-            return self.books[index]
-
-        for book in self.books:
-            if not book['loaded']:
-                return book
-
-    def save_books():
-        with open('books.txt', 'w', encoding='utf8') as f:
-            json.dump(self.books, f, ensure_ascii=False)
-
 
     def get_content(soup):
         c = BeautifulSoup()

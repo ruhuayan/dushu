@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import os
 from dotenv import load_dotenv
-import json
 import re
 from connection import Connection
 
