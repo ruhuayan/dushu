@@ -2,9 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import os
-from dotenv import load_dotenv
 import re
-from connection import Connection
+from connection import Database
 
 load_dotenv()
 BASE_URL = os.getenv('BASE_URL')
@@ -44,7 +43,7 @@ def create_books():
             book = (title, href, author, category, alphabet)
             books.append(book)
     
-    conn = Connection(os.getenv('DB_HOST'), os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), os.getenv('DB'))
+    conn = Database()
     conn.connect()
     conn.insert_books(books)
     conn.close()

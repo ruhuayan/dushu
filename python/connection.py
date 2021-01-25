@@ -1,22 +1,22 @@
+import os
+from dotenv import load_dotenv
 from mysql.connector import connect, Error
 
-class Connection:
+BASE_URL = os.getenv('BASE_URL')
+class Database:
 
-    def __init__(self, host: str, user: str, password: str, db: str):
-        self._host = host
-        self._user = user
-        self._password = password
-        self._db = db
+    def __init__(self):
+        self.config = {
+                        host : os.getenv('DB_HOST'), 
+                        user : os.getenv('DB_USER'),
+                        password : os.getenv('DB_PASSWORD'), 
+                        database : os.getenv('DB')
+                    }
         self.connection = None
 
     def connect(self):
         try:
-            self.connection = connect(
-                                        host = self._host,
-                                        user = self._user,
-                                        password = self._password,
-                                        database = self._db,
-                                    )
+            self.connection = connect(**self.config)
         except Error as e:
             print(e)
     
@@ -62,8 +62,8 @@ class Connection:
             result = cursor.fetchone()
             return result
 
-    def set_book_loaded(self, book_id: int):
-        update_book_qurey = f'UPDATE books SET loaded = 1 WHERE id = {book_id}'
+    def set_book_loaded(self, book_id: int, desc: str):
+        update_book_qurey = f'UPDATE books SET loaded = 1, description = {desc} WHERE id = {book_id}'
         with self.connection.cursor() as cursor:
             cursor.execute(update_book_qurey)
             connection.commit()

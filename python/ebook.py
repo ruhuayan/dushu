@@ -4,6 +4,7 @@ import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
 from typing import Optional, List
+from pdfkit import pdfkit
 
 class Chapter:
     index = 0
@@ -17,9 +18,10 @@ class Chapter:
 
 class Ebook:
 
-    def __init__(self, title: str, author = 'ruhuayan.github.io'):
+    def __init__(self, id: int, title: str, author = '无名氏'):
+        self.id = id
         self.title = title
-        self.output_path = f'output/{title}'
+        self.output_path = f'ebooks/{title}'
         self.author = author
         self.file_name = f'{title}.html'
         self._templates_env = Environment(loader=FileSystemLoader(
@@ -105,15 +107,29 @@ class Ebook:
         )
         return opf_file
 
+    ''' convert html to pdf '''
+    def _render_pdf(self, html: str)->None:
+        input_file = os.path.join(self.output_path, html)
+        output_file = os.path.join(self.output_path, f'{self.title}.pdf')
+        pdfkit.from_file(input_file, output_file) 
+
     def save(self) -> None:
         self.create_folder()
         self._render_main()
         self._render_toc_ncx()
-        self._render_toc_html()
+        html = self._render_toc_html()
         opf_file = self._render_opf()
         #self.save_cover()
+
+        self._render_pdf(html)
         rc = subprocess.call([
             'ebook-convert', os.path.join(self.output_path, opf_file), os.path.join(self.output_path, f'{self.title}.mobi') 
         ])
         if rc != 0:
             raise Exception('ebook-convert failed')
+
+    def __iter__(self):
+        for Chapter in self.chapters:
+            chapter_record = (chapter.index, self.id, chapter.title, Chapter.content)
+            yield chapter_record
+

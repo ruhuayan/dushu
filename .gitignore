@@ -9,6 +9,7 @@ python/books.txt
 .env
 .env.local
 .env.*.local
+scapy
 
 # Log files
 npm-debug.log*
