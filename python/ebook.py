@@ -4,7 +4,7 @@ import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
 from typing import Optional, List
-from pdfkit import pdfkit
+import pdfkit
 
 class Chapter:
     index = 0
@@ -111,13 +111,15 @@ class Ebook:
     def _render_pdf(self, html: str)->None:
         input_file = os.path.join(self.output_path, html)
         output_file = os.path.join(self.output_path, f'{self.title}.pdf')
-        pdfkit.from_file(input_file, output_file) 
+        with open(input_file) as f:
+            pdfkit.from_file(f, output_file)
+
 
     def save(self) -> None:
         self.create_folder()
-        self._render_main()
+        html = self._render_main()
         self._render_toc_ncx()
-        html = self._render_toc_html()
+        self._render_toc_html()
         opf_file = self._render_opf()
         #self.save_cover()
 
@@ -130,6 +132,6 @@ class Ebook:
 
     def __iter__(self):
         for Chapter in self.chapters:
-            chapter_record = (chapter.index, self.id, chapter.title, Chapter.content)
+            chapter_record = (chapter.index, self.id, chapter.title, str(Chapter.content))
             yield chapter_record
 

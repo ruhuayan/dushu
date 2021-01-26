@@ -3,10 +3,8 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import os
 import re
-from connection import Database
+from connection import Database, BASE_URL
 
-load_dotenv()
-BASE_URL = os.getenv('BASE_URL')
 book_url = urljoin(BASE_URL, 'book')
 page = requests.get(BASE_URL)
 soup = BeautifulSoup(page.content, 'html.parser', from_encoding="gb18030")

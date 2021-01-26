@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from mysql.connector import connect, Error
 
+load_dotenv()
 BASE_URL = os.getenv('BASE_URL')
 class Database:
 
