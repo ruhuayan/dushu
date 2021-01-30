@@ -4,7 +4,7 @@ import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
 from typing import Optional, List
-import pdfkit
+from weasyprint import HTML
 
 class Chapter:
     index = 0
@@ -111,8 +111,9 @@ class Ebook:
     def _render_pdf(self, html: str)->None:
         input_file = os.path.join(self.output_path, html)
         output_file = os.path.join(self.output_path, f'{self.title}.pdf')
-        with open(input_file) as f:
-            pdfkit.from_file(f, output_file)
+
+        # make sure chinese font is installed in system
+        HTML(filename=input_file, encoding='UTF-8').write_pdf(output_file)
 
 
     def save(self) -> None:

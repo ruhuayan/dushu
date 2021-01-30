@@ -7,7 +7,18 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 ```
+### Problem when converting HTML in chinese to pdf
+```
+sudo apt-get install --assume-yes fontconfig
 
+sudo mkdir -p /usr/share/fonts/windows
+
+sudo cp -r /mnt/c/Windows/Fonts/*.ttf /usr/share/fonts/windows/
+
+fc-cache
+
+sudo locale-gen zh_CN.UTF-8
+```
 ## Frontend setup
 ```
 npm install

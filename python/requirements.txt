@@ -1,6 +1,6 @@
 bs4
 requests
 jinja2
-pdfkit
 python-dotenv
 mysql-connector-python
+weasyprint
