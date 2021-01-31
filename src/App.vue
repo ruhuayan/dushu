@@ -1,9 +1,7 @@
 <template>
-    <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-    </div>
+    <Narbar />
     <router-view />
+    <Footer />
 </template>
 
 <style lang="scss">
@@ -11,20 +9,20 @@
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
+    // text-align: center;
     color: #2c3e50;
 }
-
-#nav {
-    padding: 30px;
-
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
-        }
-    }
-}
 </style>
+<script>
+// @ is an alias to /src
+import Narbar from "@/components/Narbar.vue";
+import Footer from "./components/Footer.vue";
+
+export default {
+    name: "App",
+    components: { Narbar, Footer },
+    data() {
+        return {};
+    },
+};
+</script>

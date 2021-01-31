@@ -1,17 +1,22 @@
 <template>
-    <div class="home">
-        <HelloWorld msg="Home Page" />
-    </div>
+    <div class="home">All Books</div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
     name: "Home",
-    components: {
-        HelloWorld,
+    components: {},
+    props: {},
+    data() {
+        return {
+            books: [],
+        };
+    },
+    mounted: function () {
+        this.loadAllBooks();
+    },
+    methods: {
+        loadAllBooks: function () {},
     },
 };
 </script>
