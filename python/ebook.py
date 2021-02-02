@@ -11,6 +11,7 @@ class Chapter:
     def __init__(self, title: str):
         Chapter.index = Chapter.index + 1
         self.id = f'chapter_{Chapter.index}'
+        self.db_id = Chapter.index
         self.title = title
 
     def set_content(self, content):
@@ -132,7 +133,7 @@ class Ebook:
             raise Exception('ebook-convert failed')
 
     def __iter__(self):
-        for Chapter in self.chapters:
-            chapter_record = (chapter.index, self.id, chapter.title, str(Chapter.content))
+        for chapter in self.chapters:
+            chapter_record = (chapter.db_id, self.id, chapter.title, str(chapter.content))
             yield chapter_record
 

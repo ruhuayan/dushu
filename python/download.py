@@ -8,8 +8,7 @@ import re
 class Download:
 
     def __init__(self):
-        pass
-        # self.db = Database()
+        self.db = Database()
 
     def start(self):
         if not self.db.connection:
@@ -20,17 +19,18 @@ class Download:
             if not book:
                 print('No unloaded book found')
                 return
-
-            desc = self._download(book)
+            # (2, '暗算', '/zhongguomingzhu/ansuan/', '麦家', 'zhongguomingzhu', 'A', None, 0)
+            desc, ebook = self._download(book)
 
             # insert chpaters
-            chapter_records = list(book)
+            chapter_records = list(ebook)
+            print(chapter_records[0:1])
             self.db.insert_chapters(chapter_records)
 
-            self.db.set_book_loaded(book['id'])
+            self.db.set_book_loaded(book[0], desc)
 
     def _download(self, book) -> str:
-        page_url = urljoin(BASE_URL, book['href'])
+        page_url = urljoin(BASE_URL, book[2])
         print(page_url)
         page = requests.get(page_url)
         soup = BeautifulSoup(page.content, 'html.parser', from_encoding="gb18030")
@@ -40,8 +40,8 @@ class Download:
         description = desc_td.get_text()
 
         links = soup.find('td', class_='content').find_all('a')
-        ebook = Ebook(book['id'], book['title'], book['author'])
-
+        ebook = Ebook(book[0], book[1], book[3])
+        Chapter.index = 0
         for link in links:
             print(link)
 
@@ -58,10 +58,9 @@ class Download:
             ebook.add_chapter(chapter)
 
         ebook.save()
-        return description
+        return description, ebook
 
     def get_content(self, soup: BeautifulSoup) -> BeautifulSoup:
-        c = BeautifulSoup()
         section = soup.find('td', class_='content')
         
         # change section tag name
@@ -81,11 +80,8 @@ class Download:
             for attribute in ["class", "id", "style"]:
                 del tag[attribute]
 
-        c.append(section)
-        return c
+        return section
 
 download = Download()
-book = {"id": 3, "title": "沉船", "href": "/waiguomingzhu/chenchuan/", "category": "waiguomingzhu", "author": "泰戈尔", "alphabet": "C"}
-desc = download._download(book)
-print(desc)
+download.start()
 

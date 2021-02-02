@@ -8,10 +8,10 @@ class Database:
 
     def __init__(self):
         self.config = {
-                        host : os.getenv('DB_HOST'), 
-                        user : os.getenv('DB_USER'),
-                        password : os.getenv('DB_PASSWORD'), 
-                        database : os.getenv('DB')
+                        'host' : os.getenv('DB_HOST'), 
+                        'user' : os.getenv('DB_USER'),
+                        'password' : os.getenv('DB_PASSWORD'), 
+                        'database' : os.getenv('DB')
                     }
         self.connection = None
 
@@ -59,7 +59,7 @@ class Database:
     def get_unloaded_book(self):
         select_book_query = "SELECT * FROM books WHERE loaded = 0 LIMIT 1"
         with self.connection.cursor() as cursor:
-            cursor.execute(select_books_query)
+            cursor.execute(select_book_query)
             result = cursor.fetchone()
             return result
 
