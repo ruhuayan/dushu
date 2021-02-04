@@ -24,7 +24,7 @@ class Download:
 
             # insert chpaters
             chapter_records = list(ebook)
-            print(chapter_records[0:1])
+
             self.db.insert_chapters(chapter_records)
 
             self.db.set_book_loaded(book[0], desc)
@@ -58,7 +58,7 @@ class Download:
             ebook.add_chapter(chapter)
 
         ebook.save()
-        return description, ebook
+        return str(description), ebook
 
     def get_content(self, soup: BeautifulSoup) -> BeautifulSoup:
         section = soup.find('td', class_='content')

@@ -47,12 +47,12 @@ class Database:
             insert_chapters_query = """
             INSERT INTO chapters
             (chapter_id, book_id, title, content)
-            VALUES ( %d, %d, %s, %s)
+            VALUES ( %s, %s, %s, %s)
             """
             with self.connection.cursor() as cursor:
                 cursor.executemany(insert_chapters_query, chapters)
                 self.connection.commit()
-                
+                print(cursor.rowcount, "chapter(s) affected")
         except Error as e:
             print(e)
 
@@ -64,11 +64,11 @@ class Database:
             return result
 
     def set_book_loaded(self, book_id: int, desc: str):
-        update_book_qurey = f'UPDATE books SET loaded = 1, description = {desc} WHERE id = {book_id}'
+        update_book_qurey = f'UPDATE books SET loaded = 1, description = "{desc}" WHERE id = {book_id}'
         with self.connection.cursor() as cursor:
             cursor.execute(update_book_qurey)
-            connection.commit()
-            print(cursor.rowcount, "record(s) affected")
+            self.connection.commit()
+            print(cursor.rowcount, "book affected")
 
     def close(self):
         self.connection.close()
