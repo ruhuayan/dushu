@@ -33,10 +33,24 @@ class Database:
             insert_books_query = """
             INSERT INTO books
             (title, href, author, category, alphabet)
-            VALUES ( %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s)
             """
             with self.connection.cursor() as cursor:
                 cursor.executemany(insert_books_query, books)
+                self.connection.commit()
+                
+        except Error as e:
+            print(e)
+
+    def insert_series(self, series):
+        try:
+            insert_series_query = """
+            INSERT INTO series
+            (book_id, serie_title, href)
+            VALUES (%s, %s, %s)
+            """
+            with self.connection.cursor() as cursor:
+                cursor.executemany(insert_series_query, series)
                 self.connection.commit()
                 
         except Error as e:
@@ -64,7 +78,7 @@ class Database:
             return result
 
     def set_book_loaded(self, book_id: int, desc: str):
-        update_book_qurey = f'UPDATE books SET loaded = 1, description = "{desc}" WHERE id = {book_id}'
+        update_book_qurey = f'UPDATE books SET loaded = 1, description = \'{desc}\' WHERE id = {book_id}'
         with self.connection.cursor() as cursor:
             cursor.execute(update_book_qurey)
             self.connection.commit()

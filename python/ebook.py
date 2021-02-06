@@ -3,7 +3,7 @@ import shutil
 import os
 import subprocess
 from jinja2 import Environment, FileSystemLoader
-from typing import Optional, List
+from typing import Optional, List, Tuple
 from weasyprint import HTML
 
 class Chapter:
@@ -29,7 +29,9 @@ class Ebook:
             str(pathlib.Path(__file__).parent / 'templates/')))
         
         self.chapters = list()
-        self.chapter_index = 0
+
+        self.has_series = False
+        self.series = list()
 
     def _render_file(self, template_name: str, context: dict, filename: str):
         template = self._templates_env.get_template(template_name)
@@ -50,6 +52,9 @@ class Ebook:
 
     def add_chapter(self, chapter: Chapter): 
         self.chapters.append(chapter)
+
+    def add_series(self, serie: Tuple): 
+        self.series.append(serie)
 
     def save_cover(self) -> None:
         if self.cover_path:

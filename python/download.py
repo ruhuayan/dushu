@@ -22,10 +22,14 @@ class Download:
             # (2, '暗算', '/zhongguomingzhu/ansuan/', '麦家', 'zhongguomingzhu', 'A', None, 0)
             desc, ebook = self._download(book)
 
-            # insert chpaters
-            chapter_records = list(ebook)
+            if ebook.has_series:
+                # insert series
+                self.db.insert_series(ebook.series)
+            else: 
+                # insert chpaters
+                chapter_records = list(ebook)
 
-            self.db.insert_chapters(chapter_records)
+                self.db.insert_chapters(chapter_records)
 
             self.db.set_book_loaded(book[0], desc)
 
@@ -46,6 +50,13 @@ class Download:
             print(link)
 
             chapter_name = link.get_text()
+
+            if '.html' not in link['href'] and '.htm' not in link['href']:
+                ebook.has_series = True
+                serie = (book[0], chapter_name, link['href'])
+                ebook.add_series(serie)
+                continue
+
             page = requests.get(urljoin(BASE_URL, link['href']))
             soup = BeautifulSoup(page.content, 'html.parser', from_encoding="gb18030")
 
@@ -57,12 +68,15 @@ class Download:
             chapter.set_content(chapter_content)
             ebook.add_chapter(chapter)
 
-        ebook.save()
-        return str(description), ebook
+        if ebook.has_series:
+            return str(description), ebook
+        else:
+            ebook.save()
+            return str(description), ebook
 
     def get_content(self, soup: BeautifulSoup) -> BeautifulSoup:
         section = soup.find('td', class_='content')
-        
+
         # change section tag name
         for attribute in ["class", "colspan"]:
             del section[attribute]
