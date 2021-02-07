@@ -21,19 +21,21 @@ class Download:
             if not book:
                 print('No unloaded book found')
                 return
+            try:
+                desc, ebook = self._download(book)
 
-            desc, ebook = self._download(book)
+                if ebook.has_series:
+                    # insert series
+                    self.db.insert_series(ebook.series)
+                else: 
+                    # insert chpaters
+                    chapter_records = list(ebook)
 
-            if ebook.has_series:
-                # insert series
-                self.db.insert_series(self.ebook.series)
-            else: 
-                # insert chpaters
-                chapter_records = list(ebook)
+                    self.db.insert_chapters(chapter_records)
 
-                self.db.insert_chapters(chapter_records)
-
-            self.db.set_book_loaded(book[0], desc)
+                self.db.set_book_loaded(book[0], desc)
+            except:
+                logging.error(f'{book[1]} (id: {book[0]}) download failed')
 
     def _download(self, book) -> str:
         page_url = urljoin(BASE_URL, book[2])
@@ -44,6 +46,9 @@ class Download:
         # get book description
         desc_td = soup.find('td', class_='Readme')
         description = desc_td.get_text()
+        
+        ebook = Ebook(book[0], book[1], book[3])
+        Chapter.index = 0
 
         try:
             content_td = soup.find('td', class_='content')
@@ -51,14 +56,9 @@ class Download:
             links = content_td.find('table').find_all('a') if content_td.find('table') else content_td.find_all('a')
         except:
             links = soup.find_all('a', class_='m002')
-            ebook = Ebook(book[0], book[1], book[3])
-            Chapter.index = 0
             ebook.has_series = True
             ebook.series = [(book[0], link['title'], link['href']) for link in links]
             return str(description), ebook
-
-        ebook = Ebook(book[0], book[1], book[3])
-        Chapter.index = 0
 
         # chapters gt 300
         if len(links) > 300:
