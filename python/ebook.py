@@ -32,6 +32,8 @@ class Ebook:
 
         self.has_series = False
         self.series = list()
+        # chapter start from 1 in every ebook
+        Chapter.index = 0
 
     def _render_file(self, template_name: str, context: dict, filename: str):
         template = self._templates_env.get_template(template_name)

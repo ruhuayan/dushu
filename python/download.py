@@ -10,7 +10,7 @@ class Download:
 
     def __init__(self):
         self.db = Database()
-        logging.basicConfig(filename='download.log', format='%(name)s - %(levelname)s - %(message)s')
+        logging.basicConfig(filename='download.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
     def start(self):
         if not self.db.connection:
@@ -48,7 +48,7 @@ class Download:
         description = desc_td.get_text()
         
         ebook = Ebook(book[0], book[1], book[3])
-        Chapter.index = 0
+        #Chapter.index = 0
 
         try:
             content_td = soup.find('td', class_='content')
