@@ -43,10 +43,21 @@ class Download:
         desc_td = soup.find('td', class_='Readme')
         description = desc_td.get_text()
 
-        links = soup.find('td', class_='content').find_all('a')
+        try:
+            content_td = soup.find('td', class_='content')
+            # in series page, no table used
+            links = content_td.find('table').find_all('a') if content_td.find('table') else content_td.find_all('a')
+        except:
+            links = soup.find_all('a', class_='m002')
+            ebook = Ebook(book[0], book[1], book[3])
+            Chapter.index = 0
+            ebook.has_series = True
+            ebook.series = [(book[0], link['title'], link['href']) for link in links]
+            return str(description), ebook
+
         ebook = Ebook(book[0], book[1], book[3])
         Chapter.index = 0
-        for link in links:
+        for link in links[0:250]:
             print(link)
 
             chapter_name = link.get_text()
@@ -57,7 +68,9 @@ class Download:
                 ebook.add_series(serie)
                 continue
 
-            page = requests.get(urljoin(BASE_URL, link['href']))
+            # htm page use 001.htm
+            chapter_url = urljoin(BASE_URL, link['href']) if '.html' in link['href'] else urljoin(page_url, link['href'].replace('mydoc', ''))
+            page = requests.get(chapter_url)
             soup = BeautifulSoup(page.content, 'html.parser', from_encoding="gb18030")
 
             # create chapter header
