@@ -4,11 +4,13 @@ from urllib.parse import urljoin
 from ebook import Chapter, Ebook
 from connection import Database, BASE_URL
 import re
+import logging
 
 class Download:
 
     def __init__(self):
         self.db = Database()
+        logging.basicConfig(filename='download.log', format='%(name)s - %(levelname)s - %(message)s')
 
     def start(self):
         if not self.db.connection:
@@ -19,12 +21,12 @@ class Download:
             if not book:
                 print('No unloaded book found')
                 return
-            # (2, '暗算', '/zhongguomingzhu/ansuan/', '麦家', 'zhongguomingzhu', 'A', None, 0)
+
             desc, ebook = self._download(book)
 
             if ebook.has_series:
                 # insert series
-                self.db.insert_series(ebook.series)
+                self.db.insert_series(self.ebook.series)
             else: 
                 # insert chpaters
                 chapter_records = list(ebook)
@@ -57,7 +59,15 @@ class Download:
 
         ebook = Ebook(book[0], book[1], book[3])
         Chapter.index = 0
-        for link in links[0:250]:
+
+        # chapters gt 300
+        if len(links) > 300:
+            links = links[0:300]
+            logging.warning(f'{book[1]} (id: {book[0]}) has {len(links)} chapters')
+        # links = links[0:300] if len(links) > 300 else links
+        print(f'{len(links)} chapters')
+
+        for link in links:
             print(link)
 
             chapter_name = link.get_text()
@@ -76,7 +86,11 @@ class Download:
             # create chapter header
             chapter = Chapter(chapter_name)
 
-            chapter_content = self.get_content(soup)
+            try:
+                chapter_content = self.get_content(soup)
+            except:
+                chapter_content = ''
+                logging.error(f'{book[1]} (id: {book[0]}) is missing Chapter {chapter_name}')
 
             chapter.set_content(chapter_content)
             ebook.add_chapter(chapter)

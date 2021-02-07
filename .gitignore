@@ -10,7 +10,7 @@ python/ebooks
 .env
 .env.local
 .env.*.local
-scapy
+python/*.log
 
 # Log files
 npm-debug.log*
