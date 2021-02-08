@@ -62,8 +62,8 @@ class Download:
 
         # chapters gt 300
         if len(links) > 300:
-            links = links[0:300]
             logging.warning(f'{book[1]} (id: {book[0]}) has {len(links)} chapters')
+            links = links[0:300]
         # links = links[0:300] if len(links) > 300 else links
         print(f'{len(links)} chapters')
 

@@ -128,7 +128,7 @@ class Ebook:
         self.create_folder()
         html = self._render_main()
         self._render_toc_ncx()
-        self._render_toc_html()
+        # self._render_toc_html()
         opf_file = self._render_opf()
         #self.save_cover()
 
