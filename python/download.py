@@ -34,8 +34,8 @@ class Download:
                     self.db.insert_chapters(chapter_records)
 
                 self.db.set_book_loaded(book[0], desc)
-            except:
-                logging.error(f'{book[1]} (id: {book[0]}) download failed')
+            except Exception as e:
+                logging.error(f'{book[1]} (id: {book[0]}) download failed', exc_info=True)
 
     def _download(self, book) -> str:
         page_url = urljoin(BASE_URL, book[2])
@@ -45,7 +45,7 @@ class Download:
 
         # get book description
         desc_td = soup.find('td', class_='Readme')
-        description = desc_td.get_text()
+        description = desc_td.get_text() if desc_td else ''
         
         ebook = Ebook(book[0], book[1], book[3])
         #Chapter.index = 0
@@ -68,7 +68,6 @@ class Download:
         print(f'{len(links)} chapters')
 
         for link in links:
-            print(link)
 
             chapter_name = link.get_text()
 
@@ -85,7 +84,7 @@ class Download:
 
             # create chapter header
             chapter = Chapter(chapter_name)
-
+            print(f'chapter - {chapter.db_id}')
             try:
                 chapter_content = self.get_content(soup)
             except:
@@ -95,11 +94,13 @@ class Download:
             chapter.set_content(chapter_content)
             ebook.add_chapter(chapter)
 
-        if ebook.has_series:
-            return str(description), ebook
-        else:
-            ebook.save()
-            return str(description), ebook
+        if not ebook.has_series:
+            try:
+                ebook.save()
+            except Exception as e:
+                logging.error(f'{book[1]} (id: {book[0]}) raised exception', exc_info=True)
+
+        return str(description), ebook
 
     def get_content(self, soup: BeautifulSoup) -> BeautifulSoup:
         section = soup.find('td', class_='content')
