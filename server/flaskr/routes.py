@@ -2,6 +2,10 @@ from flask import request, jsonify, make_response
 from flask import current_app as app
 from .models import *
 
+@app.errorhandler(404) 
+def not_found(e): 
+    return '404'
+
 @app.route('/api/')
 def index():
     return 'Hello World!'
