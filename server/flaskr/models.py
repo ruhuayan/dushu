@@ -16,6 +16,18 @@ class Book(db.Model):
     download_pdf_count = db.Column(db.Integer)
     created_at = db.Column(db.DateTime())
 
+    def download_ebook(id):
+        book_to_update = Book.query.filter_by(id=id).first()
+        book_to_update.download_ebook_count += 1
+        db.session.commit()
+        return book_to_update.download_ebook_count
+
+    def download_pdf(id):
+        book_to_update = Book.query.filter_by(id=id).first()
+        book_to_update.download_pdf_count += 1
+        db.session.commit()
+        return book_to_update.download_pdf_count
+
     def __repr__(self):
         return f'<Book {self.title}>'
 
