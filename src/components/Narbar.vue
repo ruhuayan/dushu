@@ -9,11 +9,16 @@
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            @click="toggle"
         >
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div
+            class="collapse navbar-collapse"
+            id="navbarSupportedContent"
+            :class="{ show: menuOpen }"
+        >
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <router-link class="nav-link" to="/">全部 </router-link>
@@ -68,6 +73,16 @@
         color: rgba(0, 0, 0, 1);
     }
 }
+@media (max-width: 991px) {
+    // .navbar-toggler {
+    // }
+    form.form-inline {
+        justify-content: space-between;
+        input.form-control {
+            flex: 1;
+        }
+    }
+}
 </style>
 <script>
 // @ is an alias to /src
@@ -76,9 +91,17 @@ export default {
     name: "Narbar",
     components: { NarbarDD },
     data() {
-        return {};
+        return {
+            // submenus hide in mobile screen
+            menuOpen: false,
+        };
     },
     mounted: function () {},
-    methods: {},
+    methods: {
+        toggle: function () {
+            this.menuOpen = !this.menuOpen;
+            console.log("toggle");
+        },
+    },
 };
 </script>

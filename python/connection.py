@@ -1,17 +1,17 @@
-import os
+from os import getenv
 from dotenv import load_dotenv
 from mysql.connector import connect, Error
 
 load_dotenv()
-BASE_URL = os.getenv('BASE_URL')
+BASE_URL = getenv('BASE_URL')
 class Database:
 
     def __init__(self):
         self.config = {
-                        'host' : os.getenv('DB_HOST'), 
-                        'user' : os.getenv('DB_USER'),
-                        'password' : os.getenv('DB_PASSWORD'), 
-                        'database' : os.getenv('DB')
+                        'host' : getenv('DB_HOST'), 
+                        'user' : getenv('DB_USER'),
+                        'password' : getenv('DB_PASSWORD'), 
+                        'database' : getenv('DB')
                     }
         self.connection = None
 

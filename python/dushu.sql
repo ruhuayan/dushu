@@ -5,8 +5,10 @@ CREATE TABLE IF NOT EXISTS books (
     author VARCHAR(255) NOT NULL,
     category VARCHAR(50) NOT NULL,
     alphabet VARCHAR(1) NOT NULL,
-    description TEXT,
+    description MEDIUMTEXT,
     loaded BOOLEAN NOT NULL DEFAULT FALSE,
+    download_ebook_count INT DEFAULT 0,
+    download_pdf_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )  ENGINE=INNODB;
 
@@ -30,7 +32,7 @@ ALTER TABLE chapters DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE chapters CHANGE title title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE chapters CHANGE content content TEXT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-ALTER TABLE chapters MODIFY content MEDIUMTEXT;
+-- ALTER TABLE chapters MODIFY content MEDIUMTEXT;
 
 CREATE TABLE IF NOT EXISTS series (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -44,5 +46,3 @@ CREATE TABLE IF NOT EXISTS series (
 ALTER TABLE series CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE series DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE series CHANGE serie_title serie_title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-ALTER TABLE books ADD found BOOLEAN NOT NULL DEFAULT TRUE;
