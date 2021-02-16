@@ -47,6 +47,8 @@
                     type="search"
                     placeholder="请输入书名"
                     aria-label="Search"
+                    v-model.trim="searchQuery"
+                    @input="search"
                 />
                 <button
                     class="btn btn-outline-success my-2 my-sm-0"
@@ -94,6 +96,7 @@ export default {
         return {
             // submenus hide in mobile screen
             menuOpen: false,
+            searchQuery: "",
         };
     },
     mounted: function () {},
@@ -101,6 +104,9 @@ export default {
         toggle: function () {
             this.menuOpen = !this.menuOpen;
             console.log("toggle");
+        },
+        search: function () {
+            if (!this.searchQuery) return;
         },
     },
 };

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { Http } from "../http-common";
 export default {
     name: "Home",
     components: {},
@@ -13,10 +14,10 @@ export default {
         };
     },
     mounted: function () {
-        this.loadAllBooks();
+        Http.get(`most_downloaded_books`).then(
+            (res) => (this.books = res.data)
+        );
     },
-    methods: {
-        loadAllBooks: function () {},
-    },
+    methods: {},
 };
 </script>

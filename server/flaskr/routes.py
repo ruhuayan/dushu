@@ -1,6 +1,9 @@
 from flask import request, jsonify, make_response
 from flask import current_app as app
+from flask_cors import CORS
 from .models import *
+
+CORS(app)
 
 @app.errorhandler(404) 
 def not_found(e): 

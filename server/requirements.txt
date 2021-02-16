@@ -4,3 +4,4 @@ pymysql
 marshmallow_sqlalchemy
 marshmallow
 python-dotenv
+flask-cors

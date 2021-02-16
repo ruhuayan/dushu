@@ -62,7 +62,7 @@ export default {
         },
     },
     unmounted: function () {
-        document.removeListener("click", this.onClose);
+        document.removeEventListener("click", this.onClose);
     },
 };
 </script>
