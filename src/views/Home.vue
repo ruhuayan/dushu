@@ -1,22 +1,24 @@
 <template>
-    <div class="home">All Books</div>
+    <div class="home">Most downloaded Books</div>
+    <div class="book" v-for="book in books" :key="book.id">
+        <div>{{ book.id }}</div>
+    </div>
 </template>
 
 <script>
-import { Http } from "../http-common";
+import { mapState } from "vuex";
 export default {
     name: "Home",
     components: {},
     props: {},
-    data() {
-        return {
-            books: [],
-        };
-    },
+    computed: mapState(["books"]),
+    // computed: {
+    //     books() {
+    //         return this.$store.state.books;
+    //     },
+    // },
     mounted: function () {
-        Http.get(`most_downloaded_books`).then(
-            (res) => (this.books = res.data)
-        );
+        this.$store.dispatch("loadBooks");
     },
     methods: {},
 };
