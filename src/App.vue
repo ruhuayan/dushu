@@ -1,6 +1,8 @@
 <template>
     <Narbar />
-    <router-view />
+    <div class="container" :class="{ loading: loading }">
+        <router-view />
+    </div>
     <Footer />
 </template>
 
@@ -12,8 +14,13 @@
     // text-align: center;
     color: #2c3e50;
 }
+.container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
 </style>
 <script>
+import { mapState } from "vuex";
 // @ is an alias to /src
 import Narbar from "@/components/Narbar.vue";
 import Footer from "./components/Footer.vue";
@@ -21,8 +28,11 @@ import Footer from "./components/Footer.vue";
 export default {
     name: "App",
     components: { Narbar, Footer },
-    data() {
-        return {};
+    computed: {
+        ...mapState(["loading"]),
+    },
+    mounted: function () {
+        this.$store.dispatch("loadBooks");
     },
 };
 </script>

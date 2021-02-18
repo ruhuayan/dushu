@@ -1,6 +1,7 @@
 <template>
-    <div class="book">
-        <h1>Book {{ id }}</h1>
+    <div class="book" v-if="book">
+        <h1>{{ book.title }}</h1>
+        <div class="desc">{{ book.description }}</div>
     </div>
 </template>
 <script>
@@ -9,21 +10,14 @@ export default {
     components: {},
     props: {},
     data() {
-        return {
-            id: null,
-            book: {},
-        };
+        return {};
     },
-    mounted: function () {
-        if (this.$route.params.id) {
-            this.id = this.$route.params.id;
-            this.loadBook(this.id);
-        }
-    },
-    methods: {
-        loadBook: function (id) {
-            console.log(id);
+    computed: {
+        book() {
+            return this.$store.getters["getBookById"](this.$route.params.id);
         },
     },
+    mounted: function () {},
+    methods: {},
 };
 </script>

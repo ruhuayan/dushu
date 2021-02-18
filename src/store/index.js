@@ -7,11 +7,17 @@ export default createStore({
         books: []
     },
     getters: {
-        get: (state) => state,
+        books: (state) => state.books,
+
+        // 10 most downloaded books
+        mostDownloadedBooks: (state) => {
+            const books = [...state.books].sort((a, b) => a.download_ebook_count - b.download_ebook_count)
+            return books.slice(0, 9);
+        },
 
         getBookById: (state) => (id) => {
-            return state.books.find(book => book.id === id)
-        }
+            return state.books.find(book => book.id == id);
+        },
     },
     mutations: {
         SAVE_BOOKS(state, payload) {
@@ -26,7 +32,7 @@ export default createStore({
             if (!state.loading) {
                 commit('SET_LOADING', true);
 
-                const res = await Http.get('most_downloaded_books');
+                const res = await Http.get('books');
 
                 commit('SAVE_BOOKS', res.data);
                 commit('SET_LOADING', false);

@@ -89,9 +89,13 @@
 <script>
 // @ is an alias to /src
 import NarbarDD from "@/components/NarbarDD.vue";
+import { mapGetters } from "vuex";
 export default {
     name: "Narbar",
     components: { NarbarDD },
+    computed: {
+        ...mapGetters(["books"]),
+    },
     data() {
         return {
             // submenus hide in mobile screen
@@ -103,10 +107,14 @@ export default {
     methods: {
         toggle: function () {
             this.menuOpen = !this.menuOpen;
-            console.log("toggle");
         },
         search: function () {
-            if (!this.searchQuery) return;
+            if (!this.searchQuery || !this.books) return;
+            const regex = new RegExp(this.searchQuery, "gi");
+            const mathedBooks = this.books.filter((book) =>
+                regex.test(book.title)
+            );
+            console.log(mathedBooks);
         },
     },
 };
