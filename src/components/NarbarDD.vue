@@ -9,34 +9,22 @@
             aria-haspopup="true"
             aria-expanded="false"
         >
-            其它
+            {{ categoryCn }}
         </a>
         <div
             class="dropdown-menu"
             :class="{ show: ddShow }"
             aria-labelledby="navbarDropdown"
         >
-            <router-link class="dropdown-item" to="/about/gudianmingzhu">
-                古典名著
-            </router-link>
-            <router-link class="dropdown-item" to="/about/mingrenzhuanji">
-                名人传记
-            </router-link>
-            <router-link class="dropdown-item" to="/about/tonghua">
-                儿童文学
-            </router-link>
-            <router-link class="dropdown-item" to="/about/gushi">
-                经典故事
-            </router-link>
-            <router-link class="dropdown-item" to="/about/jiaoyu">
-                教育励志
-            </router-link>
-            <router-link class="dropdown-item" to="/about/shici">
-                诗词散文
-            </router-link>
-            <div class="dropdown-divider"></div>
-            <router-link class="dropdown-item" to="/about/qtyd">
-                其它阅读
+            <!-- <div class="dropdown-divider"></div> -->
+            <router-link
+                v-for="(value, name) in categories"
+                :key="name"
+                class="dropdown-item"
+                :to="'/about/' + name"
+                :class="{ active: categoryCn === value }"
+            >
+                {{ value }}
             </router-link>
         </div>
     </li>
@@ -47,7 +35,26 @@ export default {
     data() {
         return {
             ddShow: false,
+            categoryCn: "",
         };
+    },
+    computed: {
+        categories() {
+            return {
+                gudianmingzhu: "古典名著",
+                mingrenzhuanji: "名人传记",
+                tonghua: "儿童文学",
+                gushi: "经典故事",
+                jiaoyu: "教育励志",
+                shici: "诗词散文",
+                qtyd: "其它阅读",
+            };
+        },
+    },
+    watch: {
+        $route(route) {
+            this.categoryCn = this.categories[route.params.category] || "其它";
+        },
     },
     mounted: function () {
         document.addEventListener("click", this.onClose);

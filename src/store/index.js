@@ -18,6 +18,10 @@ export default createStore({
         getBookById: (state) => (id) => {
             return state.books.find(book => book.id == id);
         },
+
+        getBookByCategory: (state) => (category) => {
+            return state.books.filter(book => book.category == category)
+        }
     },
     mutations: {
         SAVE_BOOKS(state, payload) {

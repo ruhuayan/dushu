@@ -46,3 +46,7 @@ CREATE TABLE IF NOT EXISTS series (
 ALTER TABLE series CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE series DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE series CHANGE serie_title serie_title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+update books
+set download_ebook_count = 0 and download_pdf_count = 0 
+where id not in (select book_id from chapters);
