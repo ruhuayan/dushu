@@ -21,6 +21,18 @@ const routes = [
         name: 'Book',
         props: true,
         component: () => import('../views/Book.vue')
+    },
+    {
+        path: '/author/:name',
+        name: 'Author',
+        props: true,
+        component: () => import('../views/Author.vue')
+    },
+    {
+        path: '/pinyin/:letter',
+        name: 'Pinyin',
+        props: true,
+        component: () => import('../views/Pinyin.vue')
     }
 ]
 

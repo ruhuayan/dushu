@@ -47,6 +47,12 @@ ALTER TABLE series CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE series DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE series CHANGE serie_title serie_title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-update books
-set download_ebook_count = 0 and download_pdf_count = 0 
-where id not in (select book_id from chapters);
+-- fix some missing columns
+UPDATE books SET download_ebook_count = 0 and download_pdf_count = 0 
+WHERE id not in (select book_id from chapters);
+
+UPDATE books SET description = "无内容简介"
+WHERE description is Null OR LENGTH(description) <= 1; 
+
+UPDATE books SET author = "佚名"
+WHERE author = '';

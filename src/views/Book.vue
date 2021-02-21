@@ -16,6 +16,9 @@ export default {
         book() {
             return this.$store.getters["getBookById"](this.$route.params.id);
         },
+        // chapters() {
+        //     return
+        // }
     },
     mounted: function () {},
     methods: {},

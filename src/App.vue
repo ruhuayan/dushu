@@ -23,7 +23,7 @@
 import { mapState } from "vuex";
 // @ is an alias to /src
 import Narbar from "@/components/Narbar.vue";
-import Footer from "./components/Footer.vue";
+import Footer from "@/components/Footer.vue";
 
 export default {
     name: "App",

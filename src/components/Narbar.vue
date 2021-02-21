@@ -20,10 +20,10 @@
             :class="{ show: menuOpen }"
         >
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <router-link class="nav-link" to="/">全部 </router-link>
+                <!-- <li class="nav-item">
+                    <router-link class="nav-link" to="/">首页</router-link>
                     <span class="sr-only">(current)</span>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <router-link class="nav-link" to="/about/zhongguomingzhu">
                         中国名著
@@ -40,6 +40,11 @@
                     </router-link>
                 </li>
                 <NarbarDD />
+                <li class="nav-item">
+                    <router-link class="nav-link" to="/about/wuxiaxiaoshuo">
+                        拼音导航
+                    </router-link>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input

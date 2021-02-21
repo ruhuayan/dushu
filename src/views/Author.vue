@@ -1,30 +1,30 @@
 <template>
-    <div class="about">
+    <div class="author">
         <h2>
-            {{ categoryCn }}
+            {{ $route.params.name }} 的作品
             <span>(共{{ books.length }}部)</span>
         </h2>
         <div class="books">
-            <Bookintro v-for="book in books" :key="book.id" :book="book" />
+            <Bookintro
+                v-for="book in books"
+                :key="book.id"
+                :book="book"
+                :cat-show="true"
+            />
         </div>
     </div>
 </template>
 <script>
 import Bookintro from "@/components/Bookintro";
-
 export default {
-    inject: ["Categories"],
-    name: "About",
+    name: "Author",
     components: { Bookintro },
     props: {},
     computed: {
         books() {
-            return this.$store.getters["getBookByCategory"](
-                this.$route.params.category
+            return this.$store.getters["getBooksByAuthor"](
+                this.$route.params.name
             );
-        },
-        categoryCn() {
-            return this.Categories[this.$route.params.category];
         },
     },
     data() {
