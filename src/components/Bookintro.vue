@@ -67,8 +67,14 @@ export default {
     name: "Bookintro",
     components: {},
     props: {
-        book: Object,
-        catShow: Boolean,
+        book: {
+            type: Object,
+            required: true,
+        },
+        catShow: {
+            type: Boolean,
+            default: true,
+        },
     },
     computed: {},
     methods: {},

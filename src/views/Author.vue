@@ -1,49 +1,40 @@
 <template>
-    <div class="author">
-        <h2>
-            {{ $route.params.name }} 的作品
-            <span>(共{{ books.length }}部)</span>
-        </h2>
-        <div class="books mb-5">
-            <Bookintro
-                v-for="book in books"
-                :key="book.id"
-                :book="book"
-                :cat-show="true"
-            />
-        </div>
-        <Paginator
-            :page="page"
-            :total="books.length"
-            :per-page="10"
-            @pageChange="onPageChange"
-        />
-    </div>
+    <Booklist
+        :title="title"
+        :total="books.total"
+        :books="books.selected"
+        :page="page"
+        :per-page="perPage"
+    />
 </template>
 <script>
-import Bookintro from "@/components/Bookintro";
-import Paginator from "@/components/Paginator";
+import Booklist from "@/components/Booklist";
 export default {
     name: "Author",
-    components: { Bookintro, Paginator },
+    components: { Booklist },
     props: {},
     computed: {
+        page() {
+            return this.$route.query.page ? +this.$route.query.page : 1;
+        },
+        perPage() {
+            return this.$route.query.perPage ? +this.$route.query.perPage : 10;
+        },
         books() {
             return this.$store.getters["getBooksByAuthor"](
-                this.$route.params.name
+                this.$route.params.name,
+                this.page,
+                this.perPage
             );
+        },
+        title() {
+            return `${this.$route.params.name} 的作品`;
         },
     },
     data() {
-        return {
-            page: 1,
-        };
+        return {};
     },
     mounted: function () {},
-    methods: {
-        onPageChange: function (page) {
-            console.log(page);
-        },
-    },
+    methods: {},
 };
 </script>

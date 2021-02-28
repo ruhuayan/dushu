@@ -1,25 +1,32 @@
 <template>
-    <h2>下载排行榜</h2>
-    <div class="books">
-        <Bookintro
-            v-for="book in mostDownloadedBooks"
-            :key="book.id"
-            :book="book"
-            :cat-show="true"
-        />
-    </div>
+    <Booklist
+        title="下载排行榜"
+        :total="books.total"
+        :books="books.selected"
+        :page="page"
+        :per-page="perPage"
+    />
 </template>
 <script>
-import { mapGetters } from "vuex";
-import Bookintro from "@/components/Bookintro";
+import Booklist from "@/components/Booklist";
+
 export default {
     name: "Home",
-    components: {
-        Bookintro,
-    },
+    components: { Booklist },
     props: {},
     computed: {
-        ...mapGetters(["mostDownloadedBooks"]),
+        page() {
+            return this.$route.query.page ? +this.$route.query.page : 1;
+        },
+        perPage() {
+            return this.$route.query.perPage ? +this.$route.query.perPage : 10;
+        },
+        books() {
+            return this.$store.getters["mostDownloadedBooks"](
+                this.page,
+                this.perPage
+            );
+        },
     },
     methods: {},
 };

@@ -1,32 +1,19 @@
 <template>
-    <div class="about">
-        <h2>
-            {{ categoryCn }}
-            <span>(共{{ books?.total }}部)</span>
-        </h2>
-        <div class="books mb-5">
-            <Bookintro
-                v-for="book in books?.selected"
-                :key="book.id"
-                :book="book"
-            />
-        </div>
-        <Paginator
-            :page="page"
-            :total="books.total"
-            :per-page="perPage"
-            @pageChange="onPageChange"
-        />
-    </div>
+    <Booklist
+        :title="categoryCn"
+        :total="books.total"
+        :books="books.selected"
+        :page="page"
+        :per-page="perPage"
+    />
 </template>
 <script>
-import Bookintro from "@/components/Bookintro";
-import Paginator from "@/components/Paginator";
+import Booklist from "@/components/Booklist";
 
 export default {
     inject: ["Categories"],
     name: "About",
-    components: { Bookintro, Paginator },
+    components: { Booklist },
     props: {},
     computed: {
         page() {
@@ -38,7 +25,7 @@ export default {
         books() {
             return this.$store.getters["getBooksByCategory"](
                 this.$route.params.category,
-                this.$route.query.page ? this.$route.query.page : 1,
+                this.page,
                 this.perPage
             );
         },
@@ -49,21 +36,8 @@ export default {
     data() {
         return {};
     },
-    methods: {
-        onPageChange: function (page) {
-            const query = { ...this.$route.query };
-            query.page = page;
-            query.perPage = this.perPage;
-            this.$router.replace({
-                name: "About",
-                params: this.$route.params,
-                query: query,
-            });
-        },
-    },
+    methods: {},
     watch: {},
-    mounted: function () {
-        console.log("reload");
-    },
+    mounted: function () {},
 };
 </script>

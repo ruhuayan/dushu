@@ -13,9 +13,12 @@ export default createStore({
         chapters: (state) => state.chapters,
 
         // 10 most downloaded books
-        mostDownloadedBooks: (state) => {
+        mostDownloadedBooks: (state) => (page = 1, perPage = 10) => {
             const books = [...state.books].sort((a, b) => b.download_ebook_count - a.download_ebook_count)
-            return books.slice(0, 9);
+            return {
+                total: books.length,
+                selected: books.slice(perPage * (page - 1), perPage * page)
+            };
         },
 
         getBookById: (state) => (id) => {
@@ -32,7 +35,10 @@ export default createStore({
 
         getBooksByAuthor: (state) => (author, page = 1, perPage = 10) => {
             const books = state.books.filter(book => book.author == author)
-            return books.slice(perPage * (page - 1), perPage * page)
+            return {
+                total: books.length,
+                selected: books.slice(perPage * (page - 1), perPage * page)
+            }
         },
     },
     mutations: {

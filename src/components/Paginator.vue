@@ -99,6 +99,9 @@ export default {
         },
     },
     watch: {
+        page: function (val) {
+            this.currentPage = val;
+        },
         max: function () {
             this.pages = this.formatPages(this.currentPage);
         },
