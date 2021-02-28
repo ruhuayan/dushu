@@ -22,12 +22,17 @@ export default createStore({
             return state.books.find(book => book.id == id);
         },
 
-        getBookByCategory: (state) => (category) => {
-            return state.books.filter(book => book.category == category)
+        getBooksByCategory: (state) => (category, page = 1, perPage = 10) => {
+            const books = state.books.filter(book => book.category == category);
+            return {
+                total: books.length,
+                selected: books.slice(perPage * (page - 1), perPage * page)
+            }
         },
 
-        getBooksByAuthor: (state) => (author) => {
-            return state.books.filter(book => book.author == author)
+        getBooksByAuthor: (state) => (author, page = 1, perPage = 10) => {
+            const books = state.books.filter(book => book.author == author)
+            return books.slice(perPage * (page - 1), perPage * page)
         },
     },
     mutations: {

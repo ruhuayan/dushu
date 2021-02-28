@@ -48,19 +48,59 @@
             </ul>
             <form class="form-inline my-2 my-lg-0">
                 <input
-                    class="form-control mr-sm-2"
+                    class="form-control mr-sm-2 search"
                     type="search"
                     placeholder="请输入书名"
                     aria-label="Search"
                     v-model.trim="searchQuery"
                     @input="search"
                 />
-                <button
+                <!-- <button
                     class="btn btn-outline-success my-2 my-sm-0"
                     type="submit"
                 >
                     搜索
-                </button>
+                </button> -->
+                <div class="dropdown-list" v-if="matchedTitles.length">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button
+                            class="nav-link active"
+                            id="nav-home-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-home"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-home"
+                            aria-selected="true"
+                        >
+                            Home
+                        </button>
+                        <button
+                            class="nav-link"
+                            id="nav-profile-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-profile"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-profile"
+                            aria-selected="false"
+                        >
+                            Profile
+                        </button>
+                        <button
+                            class="nav-link"
+                            id="nav-contact-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#nav-contact"
+                            type="button"
+                            role="tab"
+                            aria-controls="nav-contact"
+                            aria-selected="false"
+                        >
+                            Contact
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </nav>
@@ -78,6 +118,14 @@
     &:hover,
     &:focus {
         color: rgba(0, 0, 0, 1);
+    }
+}
+form .search {
+    transition: all 1s;
+    width: 300px;
+    &:focus {
+        width: 300px;
+        outline: none;
     }
 }
 @media (max-width: 991px) {
@@ -106,6 +154,7 @@ export default {
             // submenus hide in mobile screen
             menuOpen: false,
             searchQuery: "",
+            matchedTitles: [],
         };
     },
     mounted: function () {},
@@ -113,13 +162,20 @@ export default {
         toggle: function () {
             this.menuOpen = !this.menuOpen;
         },
+        debounce: function (fn, time) {
+            let timeId = null;
+            return function (s) {
+                if (timeId) clearTimeout(timeId);
+                timeId = setTimeout(() => fn(s), time);
+            };
+        },
         search: function () {
             if (!this.searchQuery || !this.books) return;
             const regex = new RegExp(this.searchQuery, "gi");
-            const mathedBooks = this.books.filter((book) =>
+            this.matchedTitles = this.books.filter((book) =>
                 regex.test(book.title)
             );
-            console.log(mathedBooks);
+            console.log(this.matchedTitles);
         },
     },
 };
