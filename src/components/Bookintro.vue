@@ -30,37 +30,6 @@
         </div>
     </div>
 </template>
-<style lang="scss">
-.book {
-    margin-top: 1.5rem;
-    .bookTitle {
-        font-weight: bold;
-    }
-    .author_category,
-    .downloaded_count {
-        font-size: 12px;
-        margin: 2px 0 5px 0;
-        display: flex;
-        // color: var(--info);
-        .author,
-        .download_ebook_count {
-            width: 150px;
-        }
-    }
-    .downloaded_count {
-        color: #999;
-    }
-    .bookDesc {
-        font-size: 0.9rem;
-        border-top: solid 1px rgba(0, 0, 0, 0.05);
-        border-bottom: solid 1px rgba(0, 0, 0, 0.05);
-        padding: 0.5em 0.3em;
-    }
-    a {
-        color: var(--cyan);
-    }
-}
-</style>
 <script>
 export default {
     inject: ["Categories"],

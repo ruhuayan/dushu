@@ -41,16 +41,19 @@ def search_books():
 
 @app.route('/api/books/<id>', methods = ['GET'])
 def get_book_by_id(id):
-    get_book = Book.query.get(id)
-    book_schema = BookSchema()
-    book = book_schema.dump(get_book)
 
     get_series = Serie.query.filter_by(book_id=id)
     serie_schema = SerieSchema(many=True)
     series = serie_schema.dump(get_series)
     if series:
-        return make_response(jsonify({"book": book, "series": series}))
-    return make_response(jsonify({"book": book}))
+        return make_response(jsonify({"series": series}))
+
+    get_chapters = Chapter.query.filter_by(book_id=id).offset(0).limit(3)
+    chapter_schema = ChapterSchema(many=True)
+    chapters = chapter_schema.dump(get_chapters)
+    if chapters:
+        return make_response(jsonify({ "chapters": chapters}))
+    return make_response(jsonify({"book": 'Not Found'}))
 
 @app.route('/api/books/<id>/read', methods = ['GET'])
 def get_chapters_by_book_id(id):

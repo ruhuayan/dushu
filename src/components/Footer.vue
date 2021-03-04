@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-light text-center text-lg-start">
+    <footer class="text-center text-lg-start bg-dark text-light">
         <div class="container p-4">
             <!--Grid row-->
             <div class="row">
@@ -32,7 +32,7 @@
             <!--Grid row-->
         </div>
 
-        <div class="text-center p-3 copyright">
+        <div class="text-center p-3 copyright bg-dark">
             © 2020 - 2021 Dushu
             <br />
             Powered by <a href="https://richyan.com/">richyan.com</a>
@@ -42,6 +42,5 @@
 <style scoped lang="scss">
 .copyright {
     font-size: 12px;
-    background: #fff;
 }
 </style>

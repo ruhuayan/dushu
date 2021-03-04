@@ -68,6 +68,7 @@ class Serie(db.Model):
     __tablename__ = "series"
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
+    serie_id = db.Column(db.Integer, nullable=False)
     serie_title = db.Column(db.String(255), nullable=False)
     href = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime())
@@ -80,5 +81,6 @@ class SerieSchema(ModelSchema):
         sqla_session = db.session
     id = fields.Number(dump_only=True)
     book_id = fields.Number(required=True)
+    serie_id = fields.Number(required=True)
     serie_title = fields.String(required=True)
     href = fields.String(required=True)

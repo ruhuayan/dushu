@@ -61,8 +61,6 @@ export default {
         },
     },
     watch: {},
-    mounted: function () {
-        console.log("booklist loaded");
-    },
+    mounted: function () {},
 };
 </script>

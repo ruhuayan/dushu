@@ -4,15 +4,19 @@ import { Http } from '../models/http-common';
 export default createStore({
     state: {
         loading: false,
+        bookLoading: false,
         books: [],
-        chapters: [],
+        book: {
+            id: null,
+            chapters: [],
+            series: [],
+        }
     },
     getters: {
         books: (state) => state.books,
 
-        chapters: (state) => state.chapters,
+        book: (state) => state.book,
 
-        // 10 most downloaded books
         mostDownloadedBooks: (state) => (page = 1, perPage = 10) => {
             const books = [...state.books].sort((a, b) => b.download_ebook_count - a.download_ebook_count)
             return {
@@ -21,7 +25,7 @@ export default createStore({
             };
         },
 
-        getBookById: (state) => (id) => {
+        getBookIntroById: (state) => (id) => {
             return state.books.find(book => book.id == id);
         },
 
@@ -48,8 +52,16 @@ export default createStore({
         SET_LOADING(state, loading) {
             state.loading = loading;
         },
-        SAVE_CHAPTERS(state, payload) {
-            state.chapters = payload.chapters;
+        SET_BOOK_LOADING(state, loading) {
+            state.bookLoading = loading;
+        },
+        SAVE_BOOK(state, payload, bookId) {
+            const book = {
+                id: bookId,
+                series: payload.series ? payload.series : [],
+                chapters: payload.chapters ? payload.chapters : []
+            }
+            state.book = book;
         }
     },
     actions: {
@@ -65,13 +77,13 @@ export default createStore({
         },
 
         async loadChapters({ state, commit }, payload) {
-            if (!state.loading) {
-                commit('SET_LOADING', true);
+            if (!state.bookLoading) {
+                commit('SET_BOOK_LOADING', true);
 
-                const res = await Http.get(`books/${payload}/read`);
+                const res = await Http.get(`books/${payload}`);
 
-                commit('SAVE_CHAPTERS', res.data);
-                commit('SET_LOADING', false);
+                commit('SAVE_BOOK', res.data, payload);
+                commit('SET_BOOK_LOADING', false);
             }
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <router-link class="navbar-brand" to="/">Dushu</router-link>
         <button
             class="navbar-toggler"
@@ -105,8 +105,9 @@
         </div>
     </nav>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .navbar {
+    // background-color: #926003;
     a.navbar-brand,
     a.navbar-brand:hover,
     a.navbar-brand:active {
