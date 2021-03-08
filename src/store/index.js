@@ -62,6 +62,10 @@ export default createStore({
                 chapters: payload.chapters ? payload.chapters : []
             }
             state.book = book;
+        },
+        UPDATE_BOOK(state, payload) {
+            let book = state.books.find(book => book.id == payload.id);
+            Object.assign(book, payload);
         }
     },
     actions: {
@@ -85,6 +89,14 @@ export default createStore({
                 commit('SAVE_BOOK', res.data, payload);
                 commit('SET_BOOK_LOADING', false);
             }
-        }
+        },
+        async downloadEbook({ commit }, payload) {
+            const res = await Http.get(`books/${payload}/ebook_download`);
+            commit('UPDATE_BOOK', res.data)
+        },
+        async downloadPdf({ commit }, payload) {
+            const res = await Http.get(`books/${payload}/pdf_download`);
+            commit('UPDATE_BOOK', res.data)
+        },
     }
 })

@@ -24,9 +24,9 @@
         width: 100%;
         -webkit-transition: all 0.4s ease;
         transition: all 0.4s ease;
+        z-index: 100;
         &.scrolled {
             padding: 0 1rem;
-            background-color: #efc47d !important;
             -webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
             box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
             .navbar-nav .nav-link {

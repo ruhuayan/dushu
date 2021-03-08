@@ -1,6 +1,12 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <router-link class="navbar-brand" to="/">Dushu</router-link>
+        <router-link class="navbar-brand" to="/">
+            <img
+                class="dushuIcon"
+                src="/img/dushu296x240.png"
+                alt="Dushu icon"
+            />
+        </router-link>
         <button
             class="navbar-toggler"
             type="button"
@@ -120,6 +126,10 @@
     &:focus {
         color: rgba(0, 0, 0, 1);
     }
+}
+img.dushuIcon {
+    width: 36px;
+    height: auto;
 }
 form .search {
     transition: all 1s;

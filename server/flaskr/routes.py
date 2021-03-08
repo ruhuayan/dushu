@@ -65,12 +65,12 @@ def get_chapters_by_book_id(id):
 @app.route('/api/books/<id>/ebook_download', methods = ['GET'])
 def download_ebook(id):
     count = Book.download_ebook(id)
-    return make_response(jsonify({"download_ebook_count": count}))
+    return make_response(jsonify({"id": id, "download_ebook_count": count}))
 
 @app.route('/api/books/<id>/pdf_download', methods = ['GET'])
 def download_pdf(id):
     count = Book.download_pdf(id)
-    return make_response(jsonify({"download_pdf_count": count}))
+    return make_response(jsonify({"id": id, "download_pdf_count": count}))
 
 @app.route('/api/books/<book_id>/chapters/<chapter_id>', methods = ['GET'])
 def get_chapter_by_id(book_id, chapter_id):

@@ -5,7 +5,7 @@ node_modules
 #python
 venv/
 python/books.txt
-python/ebooks
+*/ebooks/
 # local env files
 .env
 .env.local
