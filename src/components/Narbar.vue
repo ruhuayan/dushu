@@ -25,7 +25,7 @@
             id="navbarSupportedContent"
             :class="{ show: menuOpen }"
         >
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto" @click="closeToggle">
                 <!-- <li class="nav-item">
                     <router-link class="nav-link" to="/">首页</router-link>
                     <span class="sr-only">(current)</span>
@@ -47,7 +47,7 @@
                 </li>
                 <NarbarDD />
                 <li class="nav-item">
-                    <router-link class="nav-link" to="/about/wuxiaxiaoshuo">
+                    <router-link class="nav-link" to="/pinyin/A">
                         拼音导航
                     </router-link>
                 </li>
@@ -172,6 +172,9 @@ export default {
     methods: {
         toggle: function () {
             this.menuOpen = !this.menuOpen;
+        },
+        closeToggle: function () {
+            this.menuOpen = false;
         },
         debounce: function (fn, time) {
             let timeId = null;

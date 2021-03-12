@@ -44,6 +44,10 @@ export default createStore({
                 selected: books.slice(perPage * (page - 1), perPage * page)
             }
         },
+
+        getBooksByLetter: (state) => (letter = 'A') => {
+            return state.books.filter(book => book.alphabet == letter)
+        }
     },
     mutations: {
         SAVE_BOOKS(state, payload) {

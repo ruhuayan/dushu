@@ -1,33 +1,31 @@
 <template>
-    <div class="about">
-        <h1>{{ categoryCn }}</h1>
-        <div class="books">
-            <div class="book" v-for="book in books" :key="book.id">
-                <div class="bookTitle">
-                    <router-link :to="'/book/' + book.id">{{
-                        book.title
-                    }}</router-link>
-                </div>
-                <div class="bookDesc">{{ book.description }}</div>
-            </div>
+    <div class="booklist">
+        <PaginatorAZ :page="letter" />
+        <h2>
+            {{ letter }} 字头小说
+            <span>(共{{ books.length }}部)</span>
+        </h2>
+        <div class="books mb-5" v-if="books.length">
+            <Bookintro v-for="book in books" :key="book.id" :book="book" />
         </div>
+        <div class="books mb-5" v-else>没有书</div>
     </div>
 </template>
 <script>
+import Bookintro from "@/components/Bookintro";
+import PaginatorAZ from "@/components/PaginatorAZ";
 export default {
     name: "About",
-    components: {},
+    components: { Bookintro, PaginatorAZ },
     props: {},
     computed: {
-        books() {
-            return this.$store.getters["getBookByCategory"](
-                this.$route.params.category
-            );
+        letter() {
+            return this.$route.params.letter
+                ? this.$route.params.letter.toUpperCase()
+                : "A";
         },
-        letters() {
-            return Array.from({ length: 26 }).map((_, i) =>
-                String.fromCharCode(i + 97)
-            );
+        books() {
+            return this.$store.getters["getBooksByLetter"](this.letter);
         },
     },
     data() {
