@@ -52,7 +52,7 @@
                     </router-link>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
+            <form class="form-inline my-2 my-lg-0" ref="searchForm">
                 <div class="input-group">
                     <input
                         class="form-control sm-2 search"
@@ -80,7 +80,9 @@
                 <div
                     class="dropdown-list"
                     v-if="
-                        searchResult.title.length || searchResult.author.length
+                        (searchResult.title.length ||
+                            searchResult.author.length) &&
+                        !closeSearch
                     "
                 >
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -201,6 +203,26 @@ form .search {
             margin-left: 0.5rem;
         }
     }
+    /* Works on Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--gray) var(--light);
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: var(--light);
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--gray);
+        border-radius: 20px;
+        border: 3px solid var(--light);
+    }
 }
 @media (max-width: 991px) {
     form.form-inline {
@@ -233,10 +255,15 @@ export default {
                 title: [],
                 author: [],
             },
+            closeSearch: false,
         };
+    },
+    mounted: function () {
+        document.addEventListener("click", this.onCloseSearch);
     },
     unmounted: function () {
         if (this.timeId) clearTimeout(this.timeId);
+        document.removeEventListener("click", this.onCloseSearch);
     },
     methods: {
         toggle: function () {
@@ -247,13 +274,15 @@ export default {
         },
         search: function () {
             if (!this.searchQuery) return;
-            this.resetSearch();
+
             this.$router.push({
                 path: "/search",
                 query: { book: this.searchQuery, qtype: this.searchType },
             });
+            setTimeout(() => (this.closeSearch = true), 500);
         },
         onInputChange: function () {
+            // debounced - 1s
             clearTimeout(this.timeId);
             this.timeId = setTimeout(this.searchFunc, 1000);
         },
@@ -292,6 +321,13 @@ export default {
                 title: [],
                 author: [],
             };
+        },
+        onCloseSearch: function (event) {
+            if (this.$refs.searchForm.contains(event.target)) {
+                this.closeSearch = false;
+            } else {
+                this.closeSearch = true;
+            }
         },
     },
 };
