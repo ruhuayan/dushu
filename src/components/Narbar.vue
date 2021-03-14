@@ -53,58 +53,93 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <input
-                    class="form-control mr-sm-2 search"
-                    type="search"
-                    placeholder="请输入书名"
-                    aria-label="Search"
-                    v-model.trim="searchQuery"
-                    @input="search"
-                />
-                <!-- <button
-                    class="btn btn-outline-success my-2 my-sm-0"
-                    type="submit"
+                <div class="input-group">
+                    <input
+                        class="form-control sm-2 search"
+                        type="search"
+                        placeholder="请输入书名"
+                        aria-label="Search"
+                        v-model.trim="searchQuery"
+                        @input="onInputChange"
+                    />
+                    <div class="input-group-append">
+                        <button
+                            class="btn btn-search"
+                            type="button"
+                            @click="search"
+                        >
+                            <img
+                                src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCAxNzIgMTcyIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtZGFzaGFycmF5PSIiIHN0cm9rZS1kYXNob2Zmc2V0PSIwIiBmb250LWZhbWlseT0ibm9uZSIgZm9udC13ZWlnaHQ9Im5vbmUiIGZvbnQtc2l6ZT0ibm9uZSIgdGV4dC1hbmNob3I9Im5vbmUiIHN0eWxlPSJtaXgtYmxlbmQtbW9kZTogbm9ybWFsIj48cGF0aCBkPSJNMCwxNzJ2LTE3MmgxNzJ2MTcyeiIgZmlsbD0ibm9uZSI+PC9wYXRoPjxnIGZpbGw9IiMzMzMzMzMiPjxwYXRoIGQ9Ik02NC41LDE0LjMzMzMzYy0yNy42MjE0LDAgLTUwLjE2NjY3LDIyLjU0NTI3IC01MC4xNjY2Nyw1MC4xNjY2N2MwLDI3LjYyMTQgMjIuNTQ1MjcsNTAuMTY2NjcgNTAuMTY2NjcsNTAuMTY2NjdjMTIuNTI3MzIsMCAyMy45NzI1NiwtNC42NzI0OSAzMi43ODE5LC0xMi4zMTc3MWwzLjA1MTQzLDMuMDUxNDN2OS4yNjYyOGw0Myw0M2wxNC4zMzMzMywtMTQuMzMzMzNsLTQzLC00M2gtOS4yNjYyOGwtMy4wNTE0MywtMy4wNTE0M2M3LjY0NTIxLC04LjgwOTM0IDEyLjMxNzcxLC0yMC4yNTQ1OCAxMi4zMTc3MSwtMzIuNzgxOWMwLC0yNy42MjE0IC0yMi41NDUyNywtNTAuMTY2NjcgLTUwLjE2NjY3LC01MC4xNjY2N3pNNjQuNSwyOC42NjY2N2MxOS44NzUwOSwwIDM1LjgzMzMzLDE1Ljk1ODI0IDM1LjgzMzMzLDM1LjgzMzMzYzAsMTkuODc1MDkgLTE1Ljk1ODI1LDM1LjgzMzMzIC0zNS44MzMzMywzNS44MzMzM2MtMTkuODc1MDksMCAtMzUuODMzMzMsLTE1Ljk1ODI1IC0zNS44MzMzMywtMzUuODMzMzNjMCwtMTkuODc1MDkgMTUuOTU4MjQsLTM1LjgzMzMzIDM1LjgzMzMzLC0zNS44MzMzM3oiPjwvcGF0aD48L2c+PC9nPjwvc3ZnPg=="
+                                alt="icon"
+                                width="24"
+                                height="24"
+                            />
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="dropdown-list"
+                    v-if="
+                        searchResult.title.length || searchResult.author.length
+                    "
                 >
-                    搜索
-                </button> -->
-                <div class="dropdown-list" v-if="matchedTitles.length">
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button
-                            class="nav-link active"
-                            id="nav-home-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#nav-home"
-                            type="button"
-                            role="tab"
-                            aria-controls="nav-home"
-                            aria-selected="true"
-                        >
-                            Home
-                        </button>
-                        <button
-                            class="nav-link"
-                            id="nav-profile-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#nav-profile"
-                            type="button"
-                            role="tab"
-                            aria-controls="nav-profile"
-                            aria-selected="false"
-                        >
-                            Profile
-                        </button>
-                        <button
-                            class="nav-link"
-                            id="nav-contact-tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#nav-contact"
-                            type="button"
-                            role="tab"
-                            aria-controls="nav-contact"
-                            aria-selected="false"
-                        >
-                            Contact
-                        </button>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                :class="{ active: searchType === 'title' }"
+                                id="home-tab"
+                                data-toggle="tab"
+                                href="javascript:;"
+                                role="tab"
+                                aria-controls="home"
+                                :aria-selected="searchType === 'title'"
+                                @click="setSearchType('title')"
+                                >书名
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                :class="{ active: searchType === 'author' }"
+                                id="profile-tab"
+                                data-toggle="tab"
+                                href="javascript:;"
+                                role="tab"
+                                aria-controls="profile"
+                                :aria-selected="searchType === 'author'"
+                                @click="setSearchType('author')"
+                                >作者
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="bookList">
+                        <template v-if="matchedBooks.length">
+                            <div
+                                class="book"
+                                v-for="book in matchedBooks"
+                                :key="book.id"
+                            >
+                                <router-link :to="`/book/${book.id}`">
+                                    {{ book.title }}
+                                </router-link>
+                                <span class="book-author">
+                                    (作者：
+                                    <router-link :to="'/author/' + book.author">
+                                        {{ book.author }}
+                                    </router-link>
+                                    )
+                                </span>
+                            </div>
+                        </template>
+                        <div class="book" v-else>
+                            没有找到
+                            {{
+                                searchType === "author"
+                                    ? "该作者的书"
+                                    : "相关书"
+                            }}
+                        </div>
                     </div>
                 </div>
             </form>
@@ -113,7 +148,6 @@
 </template>
 <style lang="scss" scoped>
 .navbar {
-    // background-color: #926003;
     a.navbar-brand,
     a.navbar-brand:hover,
     a.navbar-brand:active {
@@ -134,14 +168,41 @@ img.dushuIcon {
 form .search {
     transition: all 1s;
     width: 300px;
+    box-shadow: none;
     &:focus {
         width: 300px;
         outline: none;
     }
 }
+.btn-search {
+    padding: 0 0.5em;
+    background: #eee;
+}
+
+.dropdown-list {
+    position: absolute;
+    top: 50px;
+    background: #fff;
+    width: 300px;
+    border-radius: 0.3rem;
+    .bookList {
+        height: 340px;
+        overflow-y: scroll;
+    }
+    .book {
+        padding: 0.2rem 0.5rem;
+        margin: 0;
+        &:first-child {
+            margin-top: 0.5rem;
+        }
+        .book-author {
+            font-size: 12px;
+            color: #999;
+            margin-left: 0.5rem;
+        }
+    }
+}
 @media (max-width: 991px) {
-    // .navbar-toggler {
-    // }
     form.form-inline {
         justify-content: space-between;
         input.form-control {
@@ -165,10 +226,18 @@ export default {
             // submenus hide in mobile screen
             menuOpen: false,
             searchQuery: "",
-            matchedTitles: [],
+            matchedBooks: [],
+            timeId: null,
+            searchType: "title",
+            searchResult: {
+                title: [],
+                author: [],
+            },
         };
     },
-    mounted: function () {},
+    unmounted: function () {
+        if (this.timeId) clearTimeout(this.timeId);
+    },
     methods: {
         toggle: function () {
             this.menuOpen = !this.menuOpen;
@@ -176,20 +245,53 @@ export default {
         closeToggle: function () {
             this.menuOpen = false;
         },
-        debounce: function (fn, time) {
-            let timeId = null;
-            return function (s) {
-                if (timeId) clearTimeout(timeId);
-                timeId = setTimeout(() => fn(s), time);
-            };
-        },
         search: function () {
-            if (!this.searchQuery || !this.books) return;
+            if (!this.searchQuery) return;
+            this.resetSearch();
+            this.$router.push({
+                path: "/search",
+                query: { book: this.searchQuery, qtype: this.searchType },
+            });
+        },
+        onInputChange: function () {
+            clearTimeout(this.timeId);
+            this.timeId = setTimeout(this.searchFunc, 1000);
+        },
+        searchFunc: function () {
+            if (!this.searchQuery || !this.books) {
+                this.resetSearch();
+                return;
+            }
             const regex = new RegExp(this.searchQuery, "gi");
-            this.matchedTitles = this.books.filter((book) =>
-                regex.test(book.title)
-            );
-            console.log(this.matchedTitles);
+
+            const booksByTitle = this.books
+                .filter((book) => regex.test(book.title))
+                .sort(
+                    (a, b) => b.download_ebook_count - a.download_ebook_count
+                );
+            const booksByAuthor = this.books
+                .filter((book) => regex.test(book.author))
+                .sort(
+                    (a, b) => b.download_ebook_count - a.download_ebook_count
+                );
+            this.searchResult = {
+                title: booksByTitle,
+                author: booksByAuthor,
+            };
+
+            this.matchedBooks = this.searchResult[this.searchType];
+            this.$store.dispatch("searchBook", this.searchQuery);
+        },
+        setSearchType: function (type) {
+            this.searchType = type;
+            this.matchedBooks = this.searchResult[type];
+        },
+        resetSearch: function () {
+            this.matchedBooks = [];
+            this.searchResult = {
+                title: [],
+                author: [],
+            };
         },
     },
 };

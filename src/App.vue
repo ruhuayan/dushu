@@ -10,6 +10,9 @@
 :root {
     --book-bg: #faebd0;
 }
+.nav-link {
+    color: var(--cyan);
+}
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -33,17 +36,26 @@
                 color: #fff;
             }
             input.search {
-                background: none;
+                background-color: #999;
                 border: none;
                 border-radius: 0;
-                border-bottom: 2px solid #fff;
+                width: 250px;
                 height: auto;
-                padding: 0.2rem;
+                padding: 0.2rem 0.3rem;
                 color: #fff;
                 &::placeholder {
                     color: #fff;
                     opacity: 0.9; /* Firefox */
                 }
+            }
+            .btn-search {
+                border: none;
+                border-radius: 0;
+                background-color: #999;
+            }
+            .dropdown-list {
+                width: 290px;
+                top: 40px;
             }
         }
     }

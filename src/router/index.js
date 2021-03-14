@@ -33,7 +33,13 @@ const routes = [
         name: 'Pinyin',
         props: true,
         component: () => import('../views/Pinyin.vue')
-    }
+    },
+    {
+        path: '/search',
+        name: 'Search',
+        props: true,
+        component: () => import('../views/Search.vue')
+    },
 ]
 
 const router = createRouter({

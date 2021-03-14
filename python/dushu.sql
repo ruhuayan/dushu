@@ -66,4 +66,15 @@ SELECT s.book_id,b2.title, b1.id,s.serie_title
 -- serie_id is foreign key to books id
 UPDATE series
 INNER JOIN books ON (series.serie_title = books.title)
-SET series.serie_id = books.id; 
+SET series.serie_id = books.id;
+
+CREATE TABLE IF NOT EXISTS search (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    query VARCHAR(50) NOT NULL,
+    ip VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)  ENGINE=INNODB;
+
+ALTER TABLE search CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE search DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE search CHANGE query query VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci;

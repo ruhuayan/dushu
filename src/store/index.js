@@ -47,7 +47,18 @@ export default createStore({
 
         getBooksByLetter: (state) => (letter = 'A') => {
             return state.books.filter(book => book.alphabet == letter)
-        }
+        },
+
+        getBooksByQuery: (state) => (query, qtype = 'title', page = 1, perPage = 10) => {
+            const regex = new RegExp(query, "gi");
+            const books = state.books.filter(book => regex.test(book[qtype])).sort(
+                (a, b) => b.download_ebook_count - a.download_ebook_count
+            );
+            return {
+                total: books.length,
+                selected: books.slice(perPage * (page - 1), perPage * page)
+            }
+        },
     },
     mutations: {
         SAVE_BOOKS(state, payload) {
@@ -102,5 +113,8 @@ export default createStore({
             const res = await Http.get(`books/${payload}/pdf_download`);
             commit('UPDATE_BOOK', res.data)
         },
+        searchBook(_, payload) {
+            Http.get(`q?book=${payload}`);
+        }
     }
 })

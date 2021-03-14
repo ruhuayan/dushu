@@ -5,6 +5,7 @@ from marshmallow import fields
 
 class Book(db.Model):
     __tablename__ = "books"
+    __table_args__ = {'extend_existing': True} 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     href = db.Column(db.String(255), nullable=False)
@@ -45,6 +46,7 @@ class BookSchema(ModelSchema):
 
 class Chapter(db.Model):
     __tablename__ = "chapters"
+    __table_args__ = {'extend_existing': True} 
     chapter_id = db.Column(db.Integer, primary_key=True, autoincrement=False,)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True, autoincrement=False)
     title = db.Column(db.String(255), nullable=False)
@@ -66,6 +68,7 @@ class ChapterSchema(ModelSchema):
 
 class Serie(db.Model):
     __tablename__ = "series"
+    __table_args__ = {'extend_existing': True} 
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
     serie_id = db.Column(db.Integer, nullable=False)
@@ -84,3 +87,19 @@ class SerieSchema(ModelSchema):
     serie_id = fields.Number(required=True)
     serie_title = fields.String(required=True)
     href = fields.String(required=True)
+
+class Search(db.Model):
+    __tablename__ = "search"
+    __table_args__ = {'extend_existing': True} 
+    id = db.Column(db.Integer, primary_key=True)
+    query = db.Column(db.String(50), nullable=False)
+    ip = db.Column(db.String(50), nullable=False)
+    # created_at = db.Column(db.DateTime())
+
+    def __init__(self, query, ip):
+        self.query = query
+        self.ip = ip
+
+    def add(newSearch):
+        db.session.add(newSearch)   
+        db.session.commit()

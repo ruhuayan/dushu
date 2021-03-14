@@ -79,3 +79,14 @@ def get_chapter_by_id(book_id, chapter_id):
     chapter_schema = ChapterSchema()
     chapter = chapter_schema.dump(get_chapter)
     return make_response(jsonify({"chapter": chapter}))
+
+@app.route('/api/q', methods = ['GET'])
+def search():
+    search_string = request.args.get('book').strip()
+    search_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+    if not search_string or not search_ip:
+        return make_response(jsonify({"success": False, 'msg': 'no search string'}))
+    newSearch = Search(search_string, search_ip)
+    Search.add(newSearch)
+    return make_response(jsonify({"success": True, 'msg': "add a search"}))
