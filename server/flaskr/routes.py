@@ -48,7 +48,7 @@ def get_book_by_id(id):
     if series:
         return make_response(jsonify({"series": series}))
 
-    get_chapters = Chapter.query.filter_by(book_id=id).offset(0).limit(3)
+    get_chapters = Chapter.query.filter_by(book_id=id)
     chapter_schema = ChapterSchema(many=True)
     chapters = chapter_schema.dump(get_chapters)
     if chapters:

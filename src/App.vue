@@ -4,6 +4,16 @@
         <router-view />
     </div>
     <Footer />
+    <svg display="none">
+        <symbol width="14" height="14" viewBox="0 0 24 24" id="download">
+            <path
+                d="m12 16c-.205 0-.401-.084-.542-.232l-5.25-5.5c-.455-.476-.117-1.268.542-1.268h2.75v-5.75c0-.689.561-1.25 1.25-1.25h2.5c.689 0 1.25.561 1.25 1.25v5.75h2.75c.659 0 .997.792.542 1.268l-5.25 5.5c-.141.148-.337.232-.542.232z"
+            />
+            <path
+                d="m22.25 22h-20.5c-.965 0-1.75-.785-1.75-1.75v-.5c0-.965.785-1.75 1.75-1.75h20.5c.965 0 1.75.785 1.75 1.75v.5c0 .965-.785 1.75-1.75 1.75z"
+            />
+        </symbol>
+    </svg>
 </template>
 
 <style lang="scss">
@@ -119,11 +129,26 @@
         // color: var(--info);
         .author,
         .download_ebook_count {
-            width: 160px;
+            width: 180px;
         }
     }
     .downloaded_count {
-        color: #999;
+        color: var(--gray);
+        .download_ebook_count,
+        .download_pdf_count {
+            > span {
+                margin-right: 0.5rem;
+            }
+            a svg {
+                width: 14px;
+                height: 14px;
+                fill: var(--info);
+                margin-top: -3px;
+                &:hover {
+                    fill: red;
+                }
+            }
+        }
     }
     .bookDesc {
         font-size: 0.9rem;

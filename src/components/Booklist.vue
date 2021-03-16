@@ -44,10 +44,6 @@ export default {
             default: 10,
         },
     },
-    computed: {},
-    data() {
-        return {};
-    },
     methods: {
         onPageChange: function (page) {
             const query = { ...this.$route.query };
@@ -60,7 +56,5 @@ export default {
             });
         },
     },
-    watch: {},
-    mounted: function () {},
 };
 </script>
