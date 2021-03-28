@@ -38,7 +38,7 @@ class Database:
             with self.connection.cursor() as cursor:
                 cursor.executemany(insert_books_query, books)
                 self.connection.commit()
-                
+                return cursor.lastrowid   
         except Error as e:
             print(e)
 
@@ -55,6 +55,13 @@ class Database:
                 
         except Error as e:
             print(e)
+
+    def set_serie_loaded(self, id, book_id: int, title: str):
+        update_book_qurey = 'UPDATE series SET serie_id = %s WHERE book_id = %s AND serie_title = %s'
+        with self.connection.cursor() as cursor:
+            cursor.execute(update_book_qurey, (id, book_id, title))
+            self.connection.commit()
+            print(cursor.rowcount, "book affected")
 
     def insert_chapters(self, chapters):
         try:
@@ -78,9 +85,9 @@ class Database:
             return result
 
     def set_book_loaded(self, book_id: int, desc: str):
-        update_book_qurey = f'UPDATE books SET loaded = 1, description = \'{desc}\' WHERE id = {book_id}'
+        update_book_qurey = 'UPDATE books SET loaded = 1, description = %s WHERE id = %s'
         with self.connection.cursor() as cursor:
-            cursor.execute(update_book_qurey)
+            cursor.execute(update_book_qurey, (desc, book_id))
             self.connection.commit()
             print(cursor.rowcount, "book affected")
 

@@ -78,3 +78,13 @@ CREATE TABLE IF NOT EXISTS search (
 ALTER TABLE search CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE search DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE search CHANGE query query VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- add missing books from series
+INSERT INTO books (title, href, author, category, alphabet)
+    SELECT s.serie_title, s.href, b.author, b.category, b.alphabet FROM series AS s INNER JOIN books AS b 
+        ON s.book_id = b.id
+        WHERE s.serie_id = 0
+
+INSERT INTO dushu.series (book_id, serie_id, serie_title, href)
+    (select c.book_id, b.id, c.title, b.href from dushu.chapters as c inner join dushu.books as b 
+		on c.title = b.title 
+		where c.book_id = 1266); 

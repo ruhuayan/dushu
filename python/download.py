@@ -5,6 +5,7 @@ from ebook import Chapter, Ebook
 from connection import Database, BASE_URL
 import re
 import logging
+import math
 
 class Download:
 
@@ -27,6 +28,23 @@ class Download:
                 if ebook.has_series:
                     # insert series
                     self.db.insert_series(ebook.series)
+
+                    # divide big book into multiple volumns
+                    if ebook.per_serie > 0:
+                        for i in range(len(ebook.series)):
+                            serie = ebook.series[i]
+                            new_book = (serie[1], book[2], book[3], book[4], book[5])
+
+                            insert_id = self.db.insert_books([new_book])
+                            print(insert_id)
+                            start = i * ebook.per_serie
+                            end = (i + 1) * ebook.per_serie
+
+                            _, ebook_series= self._download([insert_id, *new_book], start, end)
+                            records = list(ebook_series)
+                            self.db.insert_chapters(records)
+                            self.db.set_serie_loaded(insert_id, serie[0], serie[1])
+                            self.db.set_book_loaded(insert_id, desc)
                 else: 
                     # insert chpaters
                     chapter_records = list(ebook)
@@ -37,7 +55,7 @@ class Download:
             except Exception as e:
                 logging.error(f'{book[1]} (id: {book[0]}) download failed', exc_info=True)
 
-    def _download(self, book) -> str:
+    def _download(self, book, start = None, end = None) -> str:
         page_url = urljoin(BASE_URL, book[2])
         print(page_url)
         page = requests.get(page_url)
@@ -59,13 +77,32 @@ class Download:
             ebook.has_series = True
             ebook.series = [(book[0], link['title'], link['href']) for link in links]
             return str(description), ebook
+        
+        if start is not None and end is not None:
+            links = links[start:end]
+            print(f'chapter - {start} to chapter - {end}')
 
-        # chapters gt 300
-        if len(links) > 300:
-            logging.warning(f'{book[1]} (id: {book[0]}) has {len(links)} chapters')
-            links = links[0:300]
-        # links = links[0:300] if len(links) > 300 else links
-        print(f'{len(links)} chapters')
+        elif len(links) > 250: # chapters gt 250
+            total = len(links)
+            per_serie = 200
+            nums_series = total // per_serie
+            if nums_series == 1:
+                nums_series = 2
+                per_serie = total // nums_series
+            else:
+                nums_left = total % per_serie
+                per_serie += math.ceil(nums_left / nums_series)
+
+            ebook.has_series = True
+            ebook.per_serie = per_serie
+
+            for i in range(nums_series):
+                serie = (book[0], f'{book[1]}-{i+1}', book[2])
+                ebook.add_series(serie)
+
+            return str(description), ebook
+            # links = links[0:300] if len(links) > 300 else links
+            print(f'{total} chapters')
 
         for link in links:
 
@@ -84,7 +121,7 @@ class Download:
 
             # create chapter header
             chapter = Chapter(chapter_name)
-            print(f'chapter - {chapter.db_id}')
+            print(f'{chapter.db_id} - {chapter_name}')
             try:
                 chapter_content = self.get_content(soup)
             except:

@@ -31,6 +31,7 @@ class Ebook:
         self.chapters = list()
 
         self.has_series = False
+        self.per_serie = 0
         self.series = list()
         # chapter start from 1 in every ebook
         Chapter.index = 0
