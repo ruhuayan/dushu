@@ -59,7 +59,7 @@
                 {{ bookIntro.description }}
             </div>
         </div>
-        <div class="book_details">
+        <div class="book_details" :class="{ loading: bookLoading }">
             <div
                 class="chapters"
                 v-if="book.series?.length"
@@ -92,6 +92,7 @@
     </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import Authorlink from "@/components/Authorlink";
 import Downloadlink from "@/components/Downloadlink";
 export default {
@@ -105,6 +106,7 @@ export default {
         };
     },
     computed: {
+        ...mapState(["bookLoading"]),
         bookIntro() {
             return this.$store.getters["getBookIntroById"](
                 this.$route.params.id
@@ -114,7 +116,6 @@ export default {
             return this.$store.getters["book"];
         },
     },
-    mounted: function () {},
     methods: {
         downloadEbook: function (bookId) {
             this.$store.dispatch("downloadEbook", bookId);
@@ -126,11 +127,23 @@ export default {
     beforeCreate() {
         this.$store.dispatch("loadChapters", this.$route.params.id);
     },
+    watch: {
+        $route(route) {
+            this.$store.dispatch("loadChapters", route.params.id);
+        },
+    },
 };
 </script>
 <style lang="scss">
 h4 {
     margin: 2rem 0 1rem 1rem;
+}
+.book_details {
+    position: relative;
+    min-height: 400px;
+    &.loading::after {
+        top: 200px;
+    }
 }
 .book h2.title {
     display: flex;

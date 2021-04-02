@@ -36,8 +36,5 @@ export default {
     data() {
         return {};
     },
-    methods: {},
-    watch: {},
-    mounted: function () {},
 };
 </script>
