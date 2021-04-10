@@ -13,7 +13,7 @@
         </a>
         <div
             class="dropdown-menu"
-            :class="{ show: ddShow }"
+            :class="{ show: show }"
             aria-labelledby="navbarDropdown"
         >
             <!-- <div class="dropdown-divider"></div> -->
@@ -32,9 +32,15 @@
 <script>
 export default {
     name: "NarbarDD",
+    props: {
+        ddShow: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
-            ddShow: false,
+            show: false,
             categoryCn: "",
         };
     },
@@ -55,21 +61,10 @@ export default {
         $route(route) {
             this.categoryCn = this.categories[route.params.category] || "其它";
         },
-    },
-    mounted: function () {
-        document.addEventListener("click", this.onClose);
-    },
-    methods: {
-        onClose: function (event) {
-            if (this.$el.contains(event.target)) {
-                this.ddShow = !this.ddShow;
-            } else {
-                this.ddShow = false;
-            }
+        ddShow(val) {
+            this.show = val;
+            console.log(this.show);
         },
-    },
-    unmounted: function () {
-        document.removeEventListener("click", this.onClose);
     },
 };
 </script>

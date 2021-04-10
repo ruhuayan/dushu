@@ -25,7 +25,7 @@
             id="navbarSupportedContent"
             :class="{ show: menuOpen }"
         >
-            <ul class="navbar-nav mr-auto" @click="closeToggle">
+            <ul class="navbar-nav mr-auto">
                 <!-- <li class="nav-item">
                     <router-link class="nav-link" to="/">首页</router-link>
                     <span class="sr-only">(current)</span>
@@ -45,7 +45,7 @@
                         武侠小说
                     </router-link>
                 </li>
-                <NarbarDD />
+                <NarbarDD :dd-show="ddShow" ref="dropdown" />
                 <li class="nav-item">
                     <router-link class="nav-link" to="/pinyin/A">
                         拼音导航
@@ -237,6 +237,7 @@ form .search {
 // @ is an alias to /src
 import NarbarDD from "@/components/NarbarDD.vue";
 import { mapGetters } from "vuex";
+import { debounced } from "../models/debounced";
 export default {
     name: "Narbar",
     components: { NarbarDD },
@@ -247,9 +248,9 @@ export default {
         return {
             // submenus hide in mobile screen
             menuOpen: false,
+            ddShow: false,
             searchQuery: "",
             matchedBooks: [],
-            timeId: null,
             searchType: "title",
             searchResult: {
                 title: [],
@@ -259,18 +260,15 @@ export default {
         };
     },
     mounted: function () {
-        document.addEventListener("click", this.onCloseSearch);
+        document.addEventListener("click", this.onClose);
+        this.debouncedListener = debounced(this.searchFunc, 1000).bind(this);
     },
     unmounted: function () {
-        if (this.timeId) clearTimeout(this.timeId);
-        document.removeEventListener("click", this.onCloseSearch);
+        document.removeEventListener("click", this.onClose);
     },
     methods: {
         toggle: function () {
             this.menuOpen = !this.menuOpen;
-        },
-        closeToggle: function () {
-            this.menuOpen = false;
         },
         search: function () {
             if (!this.searchQuery) return;
@@ -283,8 +281,7 @@ export default {
         },
         onInputChange: function () {
             // debounced - 1s
-            clearTimeout(this.timeId);
-            this.timeId = setTimeout(this.searchFunc, 1000);
+            this.debouncedListener();
         },
         searchFunc: function () {
             if (!this.searchQuery || !this.books) {
@@ -322,11 +319,18 @@ export default {
                 author: [],
             };
         },
-        onCloseSearch: function (event) {
+        onClose: function (event) {
+            // clicks on search form
             if (this.$refs.searchForm.contains(event.target)) {
                 this.closeSearch = false;
             } else {
                 this.closeSearch = true;
+            }
+            // clicks on dropdown
+            if (this.$refs.dropdown.$el.contains(event.target)) {
+                this.ddShow = !this.ddShow;
+            } else {
+                this.ddShow = false;
             }
         },
     },

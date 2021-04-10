@@ -67,6 +67,12 @@
                 width: 290px;
                 top: 40px;
             }
+            .navbar-toggler {
+                padding: 0 0.5rem;
+                .navbar-toggler-icon {
+                    background-size: 80% 80%;
+                }
+            }
         }
     }
     .container {
@@ -166,7 +172,7 @@ import { mapState } from "vuex";
 // @ is an alias to /src
 import Narbar from "@/components/Narbar.vue";
 import Footer from "@/components/Footer.vue";
-
+import { debounced } from "./models/debounced";
 export default {
     name: "App",
     components: { Narbar, Footer },
@@ -179,15 +185,18 @@ export default {
         };
     },
     mounted: function () {
-        window.addEventListener("scroll", () => {
-            const scrollBarPosition =
-                window.pageYOffset | document.body.scrollTop;
-            if (scrollBarPosition >= 10) {
-                this.navScrolled = true;
-            } else {
-                this.navScrolled = false;
-            }
-        });
+        window.addEventListener(
+            "scroll",
+            debounced(() => {
+                const scrollBarPosition =
+                    window.pageYOffset | document.body.scrollTop;
+                if (scrollBarPosition >= 10) {
+                    this.navScrolled = true;
+                } else {
+                    this.navScrolled = false;
+                }
+            }, 150)
+        );
     },
     beforeCreate() {
         this.$store.dispatch("loadBooks");
