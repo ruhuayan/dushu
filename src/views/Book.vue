@@ -25,7 +25,7 @@
                             ></path>
                         </svg>
                     </a>
-                    <a
+                    <!-- <a
                         class="btn btn-sm"
                         data-toggle="collapse"
                         href="#collapseChapters"
@@ -44,7 +44,7 @@
                                 d="M 3 4.5 A 1.5 1.5 0 0 0 1.5 6 A 1.5 1.5 0 0 0 3 7.5 A 1.5 1.5 0 0 0 4.5 6 A 1.5 1.5 0 0 0 3 4.5 z M 7 5 L 7 7 L 22 7 L 22 5 L 7 5 z M 3 10.5 A 1.5 1.5 0 0 0 1.5 12 A 1.5 1.5 0 0 0 3 13.5 A 1.5 1.5 0 0 0 4.5 12 A 1.5 1.5 0 0 0 3 10.5 z M 7 11 L 7 13 L 22 13 L 22 11 L 7 11 z M 3 16.5 A 1.5 1.5 0 0 0 1.5 18 A 1.5 1.5 0 0 0 3 19.5 A 1.5 1.5 0 0 0 4.5 18 A 1.5 1.5 0 0 0 3 16.5 z M 7 17 L 7 19 L 22 19 L 22 17 L 7 17 z"
                             ></path>
                         </svg>
-                    </a>
+                    </a> -->
                 </span>
             </span>
             <Downloadlink :book="bookIntro" />

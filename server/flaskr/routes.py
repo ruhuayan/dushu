@@ -1,8 +1,11 @@
 from flask import request, jsonify, make_response
 from flask import current_app as app
 from flask_cors import CORS
+from flask_caching import Cache
 from .models import *
 
+cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
+cache.init_app(app)
 CORS(app)
 
 @app.errorhandler(404) 
@@ -14,6 +17,7 @@ def index():
     return 'Hello World!'
 
 @app.route('/api/books', methods = ['GET'])
+@cache.memoize(3000)
 def get_books():
     get_books = Book.query.all()
     book_schema = BookSchema(many=True)
@@ -40,6 +44,7 @@ def search_books():
     return make_response(jsonify({"books": books}))
 
 @app.route('/api/books/<id>', methods = ['GET'])
+@cache.cached()
 def get_book_by_id(id):
 
     get_series = Serie.query.filter_by(book_id=id)
@@ -55,21 +60,17 @@ def get_book_by_id(id):
         return make_response(jsonify({ "chapters": chapters}))
     return make_response(jsonify({"book": 'Not Found'}))
 
-@app.route('/api/books/<id>/read', methods = ['GET'])
-def get_chapters_by_book_id(id):
-    get_chapters = Chapter.query.filter_by(book_id=id).offset(0).limit(3)
-    chapter_schema = ChapterSchema(many=True)
-    chapters = chapter_schema.dump(get_chapters)
-    return make_response(jsonify({"chapters": chapters}))
 
 @app.route('/api/books/<id>/ebook_download', methods = ['GET'])
 def download_ebook(id):
     count = Book.download_ebook(id)
+    cache.delete_memoized(get_books)
     return make_response(jsonify({"id": id, "download_ebook_count": count}))
 
 @app.route('/api/books/<id>/pdf_download', methods = ['GET'])
 def download_pdf(id):
     count = Book.download_pdf(id)
+    cache.delete_memoized(get_books)
     return make_response(jsonify({"id": id, "download_pdf_count": count}))
 
 @app.route('/api/books/<book_id>/chapters/<chapter_id>', methods = ['GET'])

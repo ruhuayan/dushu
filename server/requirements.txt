@@ -5,4 +5,5 @@ marshmallow_sqlalchemy
 marshmallow
 python-dotenv
 flask-cors
+Flask-Caching
 Flask-Testing
