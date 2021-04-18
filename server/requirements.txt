@@ -6,4 +6,5 @@ marshmallow
 python-dotenv
 flask-cors
 Flask-Caching
+flask_limiter
 Flask-Testing

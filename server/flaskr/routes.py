@@ -3,7 +3,14 @@ from flask import current_app as app
 from flask_cors import CORS
 from flask_caching import Cache
 from .models import *
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+) 
 cache = Cache(config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
 cache.init_app(app)
 CORS(app)
@@ -13,32 +20,14 @@ def not_found(e):
     return '404'
 
 @app.route('/api/')
+@limiter.limit("1 per day")
 def index():
-    return 'Hello World!'
+    return 'Dushu API'
 
 @app.route('/api/books', methods = ['GET'])
 @cache.memoize(3000)
 def get_books():
     get_books = Book.query.all()
-    book_schema = BookSchema(many=True)
-    books = book_schema.dump(get_books)
-    return make_response(jsonify({"books": books}))
-
-@app.route('/api/most_downloaded_books', methods = ['GET'])
-def get_most_downloaded_books():
-    get_books = Book.query.order_by(Book.download_ebook_count.desc()).limit(10)
-    book_schema = BookSchema(many=True)
-    books = book_schema.dump(get_books)
-    return make_response(jsonify({"books": books}))
-
-@app.route('/api/search', methods = ['GET'])
-def search_books():
-    search_string = request.args.get('book').strip()
-    if not search_string:
-        return make_response(jsonify({"books": []}))
-
-    search = "%{}%".format(search_string)
-    get_books = Book.query.filter(Book.title.like(search) | Book.author.like(search)).all()
     book_schema = BookSchema(many=True)
     books = book_schema.dump(get_books)
     return make_response(jsonify({"books": books}))
@@ -62,26 +51,22 @@ def get_book_by_id(id):
 
 
 @app.route('/api/books/<id>/ebook_download', methods = ['GET'])
+@limiter.limit("1 per minute")
 def download_ebook(id):
     count = Book.download_ebook(id)
     cache.delete_memoized(get_books)
     return make_response(jsonify({"id": id, "download_ebook_count": count}))
 
 @app.route('/api/books/<id>/pdf_download', methods = ['GET'])
+@limiter.limit("1 per minute")
 def download_pdf(id):
     count = Book.download_pdf(id)
     cache.delete_memoized(get_books)
     return make_response(jsonify({"id": id, "download_pdf_count": count}))
 
-@app.route('/api/books/<book_id>/chapters/<chapter_id>', methods = ['GET'])
-def get_chapter_by_id(book_id, chapter_id):
-    get_chapter = Chapter.query.filter_by(book_id=book_id, chapter_id = chapter_id).first()
-    print(get_chapter)
-    chapter_schema = ChapterSchema()
-    chapter = chapter_schema.dump(get_chapter)
-    return make_response(jsonify({"chapter": chapter}))
-
+# search record
 @app.route('/api/q', methods = ['GET'])
+@limiter.limit("10 per minute")
 def search():
     search_string = request.args.get('book').strip()
     search_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
