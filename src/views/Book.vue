@@ -7,7 +7,7 @@
                     <a
                         class="btn btn-sm"
                         data-toggle="collapse"
-                        href="#"
+                        href="javascript:;"
                         role="button"
                         aria-expanded="false"
                         aria-controls="collapseExample"
@@ -99,7 +99,12 @@ export default {
     inject: ["Categories"],
     name: "Book",
     components: { Authorlink, Downloadlink },
-    props: {},
+    props: {
+        id: {
+            type: String,
+            required: true,
+        },
+    },
     data() {
         return {
             showIntro: false,
@@ -108,9 +113,7 @@ export default {
     computed: {
         ...mapState(["bookLoading"]),
         bookIntro() {
-            return this.$store.getters["getBookIntroById"](
-                this.$route.params.id
-            );
+            return this.$store.getters["getBookIntroById"](this.id);
         },
         book() {
             return this.$store.getters["book"];
@@ -125,7 +128,7 @@ export default {
         },
     },
     beforeCreate() {
-        this.$store.dispatch("loadChapters", this.$route.params.id);
+        this.$store.dispatch("loadChapters", this.id);
     },
     watch: {
         $route(route) {

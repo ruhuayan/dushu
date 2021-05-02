@@ -13,6 +13,11 @@ python/books.txt
 python/*.log
 */test.py
 
+# layer for Lambda Function
+/layers/
+# aws serverless config
+*/serverless.yml
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

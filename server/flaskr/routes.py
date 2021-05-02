@@ -50,14 +50,14 @@ def get_book_by_id(id):
     return make_response(jsonify({"book": 'Not Found'}))
 
 
-@app.route('/api/books/<id>/ebook_download', methods = ['GET'])
+@app.route('/api/books/<id>/ebook-download', methods = ['GET'])
 @limiter.limit("1 per minute")
 def download_ebook(id):
     count = Book.download_ebook(id)
     cache.delete_memoized(get_books)
     return make_response(jsonify({"id": id, "download_ebook_count": count}))
 
-@app.route('/api/books/<id>/pdf_download', methods = ['GET'])
+@app.route('/api/books/<id>/pdf-download', methods = ['GET'])
 @limiter.limit("1 per minute")
 def download_pdf(id):
     count = Book.download_pdf(id)

@@ -1,7 +1,5 @@
 """Data models."""
-from . import db
-from marshmallow_sqlalchemy import ModelSchema
-from marshmallow import fields
+from . import db, ma
 
 class Book(db.Model):
     __tablename__ = "books"
@@ -32,17 +30,9 @@ class Book(db.Model):
     def __repr__(self):
         return f'<Book {self.title}>'
 
-class BookSchema(ModelSchema):
-    class Meta(ModelSchema.Meta):
+class BookSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
         model = Book
-        sqla_session = db.session
-    id = fields.Number(dump_only=True)
-    title = fields.String(required=True)
-    href = fields.String(required=True)
-    author = fields.String(required=True)
-    category = fields.String(required=True)
-    alphabet = fields.String(required=True)
-    created_at = fields.DateTime()
 
 class Chapter(db.Model):
     __tablename__ = "chapters"
@@ -56,15 +46,9 @@ class Chapter(db.Model):
     def __repr__(self):
         return f'<Book {self.book_id} - Chapter {self.title}>'
 
-class ChapterSchema(ModelSchema):
-    class Meta(ModelSchema.Meta):
+class ChapterSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
         model = Chapter
-        sqla_session = db.session
-    chapter_id = fields.Number(required=True)
-    book_id = fields.Number(required=True)
-    title = fields.String(required=True)
-    content = fields.String()
-    created_at = fields.DateTime()
 
 class Serie(db.Model):
     __tablename__ = "series"
@@ -78,15 +62,9 @@ class Serie(db.Model):
     def __repr__(self):
         return f'<Book {self.book_id} - Serie {self.serie_title}>'
 
-class SerieSchema(ModelSchema):
-    class Meta(ModelSchema.Meta):
+class SerieSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
         model = Serie
-        sqla_session = db.session
-    id = fields.Number(dump_only=True)
-    book_id = fields.Number(required=True)
-    serie_id = fields.Number(required=True)
-    serie_title = fields.String(required=True)
-    href = fields.String(required=True)
 
 class Search(db.Model):
     __tablename__ = "search"

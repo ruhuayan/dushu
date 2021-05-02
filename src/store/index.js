@@ -106,11 +106,11 @@ export default createStore({
             }
         },
         async downloadEbook({ commit }, payload) {
-            const res = await Http.get(`books/${payload}/ebook_download`);
+            const res = await Http.get(`books/${payload}/ebook-download`);
             commit('UPDATE_BOOK', res.data)
         },
         async downloadPdf({ commit }, payload) {
-            const res = await Http.get(`books/${payload}/pdf_download`);
+            const res = await Http.get(`books/${payload}/pdf-download`);
             commit('UPDATE_BOOK', res.data)
         },
         searchBook(_, payload) {
