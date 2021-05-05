@@ -38,10 +38,5 @@ export default {
             return `搜索 "${this.query}" 的作品`;
         },
     },
-    data() {
-        return {};
-    },
-    mounted: function () {},
-    methods: {},
 };
 </script>

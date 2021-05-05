@@ -63,7 +63,6 @@ export default {
         },
         ddShow(val) {
             this.show = val;
-            console.log(this.show);
         },
     },
 };
