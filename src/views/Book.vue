@@ -131,7 +131,8 @@ export default {
         this.$store.dispatch("loadChapters", this.id);
     },
     watch: {
-        $route(route) {
+        $route(route, from) {
+            console.log(from);
             this.$store.dispatch("loadChapters", route.params.id);
         },
     },
