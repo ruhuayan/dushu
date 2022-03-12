@@ -25,14 +25,12 @@
                             ></path>
                         </svg>
                     </a>
-                    <!-- <a
+                    <a
+                        v-if="book.chapters?.length"
                         class="btn btn-sm"
-                        data-toggle="collapse"
-                        href="#collapseChapters"
                         role="button"
-                        aria-expanded="false"
-                        aria-controls="collapseExample"
                         title="章节"
+                        @click="showIntro = !showIntro"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +42,7 @@
                                 d="M 3 4.5 A 1.5 1.5 0 0 0 1.5 6 A 1.5 1.5 0 0 0 3 7.5 A 1.5 1.5 0 0 0 4.5 6 A 1.5 1.5 0 0 0 3 4.5 z M 7 5 L 7 7 L 22 7 L 22 5 L 7 5 z M 3 10.5 A 1.5 1.5 0 0 0 1.5 12 A 1.5 1.5 0 0 0 3 13.5 A 1.5 1.5 0 0 0 4.5 12 A 1.5 1.5 0 0 0 3 10.5 z M 7 11 L 7 13 L 22 13 L 22 11 L 7 11 z M 3 16.5 A 1.5 1.5 0 0 0 1.5 18 A 1.5 1.5 0 0 0 3 19.5 A 1.5 1.5 0 0 0 4.5 18 A 1.5 1.5 0 0 0 3 16.5 z M 7 17 L 7 19 L 22 19 L 22 17 L 7 17 z"
                             ></path>
                         </svg>
-                    </a> -->
+                    </a>
                 </span>
             </span>
             <Downloadlink :book="bookIntro" />
@@ -95,8 +93,9 @@
 import { mapState } from "vuex";
 import Authorlink from "@/components/Authorlink";
 import Downloadlink from "@/components/Downloadlink";
+import { Categories } from "../models/categories";
+
 export default {
-    inject: ["Categories"],
     name: "Book",
     components: { Authorlink, Downloadlink },
     props: {
@@ -110,6 +109,9 @@ export default {
             showIntro: false,
         };
     },
+    title() {
+        return this.bookIntro?.title;
+    },
     computed: {
         ...mapState(["bookLoading"]),
         bookIntro() {
@@ -118,6 +120,9 @@ export default {
         book() {
             return this.$store.getters["book"];
         },
+        Categories() {
+            return Categories;
+        }
     },
     methods: {
         downloadEbook: function (bookId) {
@@ -131,8 +136,7 @@ export default {
         this.$store.dispatch("loadChapters", this.id);
     },
     watch: {
-        $route(route, from) {
-            console.log(from);
+        $route(route) {
             this.$store.dispatch("loadChapters", route.params.id);
         },
     },

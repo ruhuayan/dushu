@@ -9,12 +9,14 @@
 </template>
 <script>
 import Booklist from "@/components/Booklist";
+import { Categories } from '../models/categories';
 
 export default {
-    inject: ["Categories"],
     name: "About",
     components: { Booklist },
-    props: {},
+    title() {
+        return this.categoryCn;
+    },
     computed: {
         page() {
             return this.$route.query.page ? +this.$route.query.page : 1;
@@ -30,11 +32,8 @@ export default {
             );
         },
         categoryCn() {
-            return this.Categories[this.$route.params.category];
+            return Categories[this.$route.params.category];
         },
-    },
-    data() {
-        return {};
     },
 };
 </script>

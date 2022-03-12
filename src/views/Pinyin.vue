@@ -17,7 +17,9 @@ import PaginatorAZ from "@/components/PaginatorAZ";
 export default {
     name: "About",
     components: { Bookintro, PaginatorAZ },
-    props: {},
+    title() {
+        return `拼音导航 - ${this.letter}`;
+    },
     computed: {
         letter() {
             return this.$route.params.letter
@@ -28,10 +30,5 @@ export default {
             return this.$store.getters["getBooksByLetter"](this.letter);
         },
     },
-    data() {
-        return {};
-    },
-    mounted: function () {},
-    methods: {},
 };
 </script>

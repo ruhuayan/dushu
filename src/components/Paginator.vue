@@ -1,6 +1,6 @@
 <template>
     <nav aria-label="Page navigation" v-if="max > 1">
-        <ul class="pagination justify-content-end">
+        <ul class="pagination justify-content-center">
             <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a
                     class="page-link"

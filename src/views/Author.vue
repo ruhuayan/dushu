@@ -12,7 +12,7 @@ import Booklist from "@/components/Booklist";
 export default {
     name: "Author",
     components: { Booklist },
-    props: {},
+    title() { return this.title },
     computed: {
         page() {
             return this.$route.query.page ? +this.$route.query.page : 1;
@@ -31,10 +31,5 @@ export default {
             return `${this.$route.params.name} 的作品`;
         },
     },
-    data() {
-        return {};
-    },
-    mounted: function () {},
-    methods: {},
 };
 </script>

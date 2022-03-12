@@ -13,7 +13,6 @@ import Booklist from "@/components/Booklist";
 export default {
     name: "Home",
     components: { Booklist },
-    props: {},
     computed: {
         page() {
             return this.$route.query.page ? +this.$route.query.page : 1;
@@ -28,6 +27,5 @@ export default {
             );
         },
     },
-    methods: {},
 };
 </script>

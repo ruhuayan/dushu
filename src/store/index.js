@@ -88,7 +88,7 @@ export default createStore({
             if (!state.loading) {
                 commit('SET_LOADING', true);
 
-                const res = await Http.get('books');
+                const res = await Http.get('books.php');
 
                 commit('SAVE_BOOKS', res.data);
                 commit('SET_LOADING', false);
@@ -99,18 +99,18 @@ export default createStore({
             if (!state.bookLoading) {
                 commit('SET_BOOK_LOADING', true);
 
-                const res = await Http.get(`books/${payload}`);
+                const res = await Http.get(`books.php?id=${payload}`);
 
                 commit('SAVE_BOOK', res.data, payload);
                 commit('SET_BOOK_LOADING', false);
             }
         },
         async downloadEbook({ commit }, payload) {
-            const res = await Http.get(`books/${payload}/ebook-download`);
+            const res = await Http.get(`books.php?id=${payload}&action=ebook-download`);
             commit('UPDATE_BOOK', res.data)
         },
         async downloadPdf({ commit }, payload) {
-            const res = await Http.get(`books/${payload}/pdf-download`);
+            const res = await Http.get(`books.php?id=${payload}&action=pdf-download`);
             commit('UPDATE_BOOK', res.data)
         },
         searchBook(_, payload) {

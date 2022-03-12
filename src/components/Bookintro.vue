@@ -16,8 +16,9 @@
 <script>
 import Authorlink from "@/components/Authorlink";
 import Downloadlink from "@/components/Downloadlink";
+import { Categories } from "../models/categories";
+
 export default {
-    inject: ["Categories"],
     name: "Bookintro",
     components: { Authorlink, Downloadlink },
     props: {
@@ -25,6 +26,11 @@ export default {
             type: Object,
             required: true,
         },
+    },
+    computed: {
+        Categories() {
+            return Categories;
+        }
     },
 };
 </script>

@@ -12,7 +12,9 @@ import Booklist from "@/components/Booklist";
 export default {
     name: "Search",
     components: { Booklist },
-    props: {},
+    title() {
+        return this.title;
+    },
     computed: {
         page() {
             return this.$route.query.page ? +this.$route.query.page : 1;

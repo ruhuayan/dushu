@@ -156,6 +156,12 @@
         color: #42b983;
     }
 }
+.nav-link.router-link-active {
+    cursor: default;
+}
+.navbar-dark .navbar-nav .nav-link.router-link-active {
+    color: rgba(255, 255, 255, 0.9);
+}
 .navbar-light .navbar-nav .nav-link.router-link-active {
     color: rgba(0, 0, 0, 1);
     &:hover,
@@ -189,7 +195,7 @@ form .search {
     border-radius: 0.3rem;
     .bookList {
         height: 340px;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .book {
         padding: 0.2rem 0.5rem;

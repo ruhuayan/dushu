@@ -44,6 +44,9 @@
             box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
             .navbar-nav .nav-link {
                 color: #fff;
+                &.router-link-active {
+                    opacity: .5;
+                }
             }
             input.search {
                 background-color: #999;
@@ -174,6 +177,7 @@ import Footer from "@/components/Footer.vue";
 import { debounced } from "./models/debounced";
 export default {
     name: "App",
+    title: '首页',
     components: { Narbar, Footer },
     computed: {
         ...mapState(["loading"]),
@@ -194,7 +198,7 @@ export default {
                 } else {
                     this.navScrolled = false;
                 }
-            }, 150)
+            }, 100)
         );
     },
     beforeCreate() {
