@@ -4,6 +4,18 @@
         <router-view />
     </div>
     <Footer />
+    <a class="btn goUp" @click="goUp">
+        <svg width="24" height="12" viewBox="0 0 80 40">
+            <polyline
+                fill="none"
+                stroke="#000"
+                stroke-width="5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                points="1,36 39,1 79, 36"
+            />
+        </svg>
+    </a>
     <svg display="none">
         <symbol width="14" height="14" viewBox="0 0 24 24" id="download">
             <path
@@ -99,6 +111,29 @@ html {
 
     nav.navbar.scrolled ~ .container .book h2.title {
         border-bottom: 1px solid;
+    }
+    a.goUp {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        background: rgba(250, 235, 208, 0.5);
+    }
+    nav.navbar.scrolled ~ a.goUp {
+        display: block;
+    }
+    .goUp:hover polyline,
+    .goUp:focus polyline {
+        stroke-width: 4;
+    }
+
+    .goUp:active polyline {
+        stroke-width: 6;
+        transition: all 100ms ease-in-out;
     }
 }
 .container.loading {
@@ -244,6 +279,12 @@ export default {
     },
     beforeCreate() {
         this.$store.dispatch("loadBooks");
+    },
+    methods: {
+        goUp: function () {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        },
     },
 };
 </script>

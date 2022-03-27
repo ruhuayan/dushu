@@ -5,26 +5,31 @@
             <div class="row">
                 <!--Grid column-->
                 <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Footer text</h5>
+                    <h5 class="text-uppercase">推荐书籍</h5>
 
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Iste atque ea quis molestias. Fugiat pariatur
-                        maxime quis culpa corporis vitae repudiandae aliquam
-                        voluptatem veniam, est atque cumque eum delectus sint!
+                    <p class="booklist">
+                        <span v-for="book of books.selected" :key="book.id">
+                            <router-link :to="`/book/${book.id}`">
+                                {{ book.title }}
+                            </router-link>
+                        </span>
                     </p>
                 </div>
                 <!--Grid column-->
 
                 <!--Grid column-->
                 <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-                    <h5 class="text-uppercase">Footer text</h5>
+                    <h5 class="text-uppercase">{{ categoryCn }}</h5>
 
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Iste atque ea quis molestias. Fugiat pariatur
-                        maxime quis culpa corporis vitae repudiandae aliquam
-                        voluptatem veniam, est atque cumque eum delectus sint!
+                    <p class="booklist">
+                        <span
+                            v-for="book of categoryBooks.selected"
+                            :key="book.id"
+                        >
+                            <router-link :to="`/book/${book.id}`">
+                                {{ book.title }}
+                            </router-link>
+                        </span>
                     </p>
                 </div>
                 <!--Grid column-->
@@ -39,7 +44,39 @@
         </div>
     </footer>
 </template>
+<script>
+import { Categories } from "../models/categories";
+export default {
+    name: "Footer",
+    computed: {
+        books() {
+            return this.$store.getters["mostDownloadedBooks"](1, 20);
+        },
+        category() {
+            const categories = Object.keys(Categories);
+            const rand = Math.floor(Math.random() * categories.length);
+            return categories[rand];
+        },
+        categoryCn() {
+            return Categories[this.category];
+        },
+        categoryBooks() {
+            return this.$store.getters["getBooksByCategory"](
+                this.category,
+                1,
+                20
+            );
+        },
+    },
+};
+</script>
 <style scoped lang="scss">
+p.booklist span a {
+    color: #fff;
+    margin: 0 8px;
+    font-size: 14px;
+    display: inline-block;
+}
 .copyright {
     font-size: 12px;
 }

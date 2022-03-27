@@ -99,7 +99,6 @@ export default {
         return {
             showIntro: false,
             showChapters: false,
-            // chapterLinks: null,
             chapterIndex: 0,
         };
     },
@@ -186,7 +185,7 @@ export default {
     },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 h4 {
     margin: 2rem 0 1rem 1rem;
 }
@@ -216,6 +215,7 @@ h4 {
     opacity: 0.96;
 
     a.chapter-link {
+        text-align: left;
         svg {
             width: 12px;
             height: 16px;
@@ -241,6 +241,9 @@ h4 {
         height: 400px;
         animation: fadein 0.5s linear normal;
         background: #fff;
+        max-width: 400px;
+        white-space: nowrap;
+        overflow-x: hidden;
         &.show {
             display: block;
         }
@@ -260,6 +263,9 @@ h4 {
             }
         }
 
+        div[id^="chapter-link_"] {
+            height: 21px;
+        }
         div.active {
             background: var(--gray-dark);
             a {
@@ -283,6 +289,14 @@ h4 {
     }
     100% {
         opacity: 1;
+    }
+}
+@media only screen and (max-width: 412px) {
+    .book h2.title {
+        flex-direction: column;
+        a.chapter-link {
+            display: block;
+        }
     }
 }
 </style>
