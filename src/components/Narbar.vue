@@ -196,6 +196,9 @@ form .search {
     .bookList {
         height: 340px;
         overflow-y: auto;
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
     }
     .book {
         padding: 0.2rem 0.5rem;
@@ -208,26 +211,6 @@ form .search {
             color: #999;
             margin-left: 0.5rem;
         }
-    }
-    /* Works on Firefox */
-    * {
-        scrollbar-width: thin;
-        scrollbar-color: var(--gray) var(--light);
-    }
-
-    /* Works on Chrome, Edge, and Safari */
-    *::-webkit-scrollbar {
-        width: 12px;
-    }
-
-    *::-webkit-scrollbar-track {
-        background: var(--light);
-    }
-
-    *::-webkit-scrollbar-thumb {
-        background-color: var(--gray);
-        border-radius: 20px;
-        border: 3px solid var(--light);
     }
 }
 @media (max-width: 991px) {

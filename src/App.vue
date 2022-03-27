@@ -13,12 +13,26 @@
                 d="m22.25 22h-20.5c-.965 0-1.75-.785-1.75-1.75v-.5c0-.965.785-1.75 1.75-1.75h20.5c.965 0 1.75.785 1.75 1.75v.5c0 .965-.785 1.75-1.75 1.75z"
             />
         </symbol>
+        <symbol width="8px" height="12px" viewBox="0 0 50 80" id="arrow">
+            <polyline
+                fill="none"
+                stroke="#343a40"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                points="0.375,0.375 45.63,38.087 0.375,75.8"
+            />
+        </symbol>
     </svg>
 </template>
 
 <style lang="scss">
+html {
+    scroll-behavior: smooth;
+}
 :root {
     --book-bg: #faebd0;
+    --book-color: #2c3e50;
 }
 .nav-link {
     color: var(--cyan);
@@ -28,7 +42,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     // text-align: center;
-    color: #2c3e50;
+    color: var(--book-color);
 
     background: var(--book-bg);
 
@@ -45,7 +59,7 @@
             .navbar-nav .nav-link {
                 color: #fff;
                 &.router-link-active {
-                    opacity: .5;
+                    opacity: 0.5;
                 }
             }
             input.search {
@@ -79,15 +93,16 @@
         }
     }
     .container {
-        padding-top: 90px;
+        padding-top: 80px;
+        padding-bottom: 3rem;
+    }
+
+    nav.navbar.scrolled ~ .container .book h2.title {
+        border-bottom: 1px solid;
     }
 }
-.container {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-    &.loading {
-        min-height: 600px;
-    }
+.container.loading {
+    min-height: 600px;
 }
 .book {
     margin-top: 1.5rem;
@@ -160,6 +175,32 @@
     border-color: var(--gray) transparent var(--gray) transparent;
     animation: loader 1.2s linear infinite;
 }
+
+/* mini-scrollbar Works on Firefox + google */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray) var(--light);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--gray);
+    border-radius: 5px;
+    border: 1px solid var(--book-bg);
+}
+
+.dropdown-list {
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.05);
+}
 @keyframes loader {
     0% {
         transform: rotate(0deg);
@@ -177,7 +218,7 @@ import Footer from "@/components/Footer.vue";
 import { debounced } from "./models/debounced";
 export default {
     name: "App",
-    title: '首页',
+    title: "首页",
     components: { Narbar, Footer },
     computed: {
         ...mapState(["loading"]),

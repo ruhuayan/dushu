@@ -1,49 +1,40 @@
 <template>
     <div class="book" v-if="bookIntro">
         <h2 class="title">
-            <span
-                >{{ bookIntro.title }}
-                <span v-if="book.chapters?.length">
-                    <a
-                        class="btn btn-sm"
-                        data-toggle="collapse"
-                        href="javascript:;"
-                        role="button"
-                        aria-expanded="false"
-                        aria-controls="collapseExample"
-                        title="简介"
-                        @click="showIntro = !showIntro"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            style="width: 16px; height: 16px"
+            <span>
+                {{ bookIntro.title }}
+                <a
+                    v-if="book.chapters?.length"
+                    class="btn btn-sm chapter-link"
+                    title="章节"
+                    @click="toggle"
+                    ref="chapterLink"
+                >
+                    <svg>
+                        <use xlink:href="#arrow" />
+                    </svg>
+                    <span class="chapter-title">
+                        {{ book.chapters[chapterIndex].title }}
+                        <div
+                            class="dropdown-list"
+                            :class="{ show: showChapters }"
                         >
-                            <path
-                                style="fill: #2196f3"
-                                d="M 7.4296875 9.5 L 5.9296875 11 L 12 17.070312 L 18.070312 11 L 16.570312 9.5 L 12 14.070312 L 7.4296875 9.5 z"
-                            ></path>
-                        </svg>
-                    </a>
-                    <a
-                        v-if="book.chapters?.length"
-                        class="btn btn-sm"
-                        role="button"
-                        title="章节"
-                        @click="showIntro = !showIntro"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            style="width: 24px; height: 24px"
-                        >
-                            <path
-                                style="fill: #2196f3"
-                                d="M 3 4.5 A 1.5 1.5 0 0 0 1.5 6 A 1.5 1.5 0 0 0 3 7.5 A 1.5 1.5 0 0 0 4.5 6 A 1.5 1.5 0 0 0 3 4.5 z M 7 5 L 7 7 L 22 7 L 22 5 L 7 5 z M 3 10.5 A 1.5 1.5 0 0 0 1.5 12 A 1.5 1.5 0 0 0 3 13.5 A 1.5 1.5 0 0 0 4.5 12 A 1.5 1.5 0 0 0 3 10.5 z M 7 11 L 7 13 L 22 13 L 22 11 L 7 11 z M 3 16.5 A 1.5 1.5 0 0 0 1.5 18 A 1.5 1.5 0 0 0 3 19.5 A 1.5 1.5 0 0 0 4.5 18 A 1.5 1.5 0 0 0 3 16.5 z M 7 17 L 7 19 L 22 19 L 22 17 L 7 17 z"
-                            ></path>
-                        </svg>
-                    </a>
-                </span>
+                            <div
+                                v-for="chapter in book.chapters"
+                                :key="chapter.chapter_id"
+                                :id="'chapter-link_' + chapter.chapter_id"
+                                :class="{
+                                    active:
+                                        chapter.chapter_id == chapterIndex + 1,
+                                }"
+                            >
+                                <a :href="'#chapter_' + chapter.chapter_id">
+                                    {{ chapter.title }}
+                                </a>
+                            </div>
+                        </div>
+                    </span>
+                </a>
             </span>
             <Downloadlink :book="bookIntro" />
         </h2>
@@ -107,6 +98,9 @@ export default {
     data() {
         return {
             showIntro: false,
+            showChapters: false,
+            // chapterLinks: null,
+            chapterIndex: 0,
         };
     },
     title() {
@@ -122,7 +116,7 @@ export default {
         },
         Categories() {
             return Categories;
-        }
+        },
     },
     methods: {
         downloadEbook: function (bookId) {
@@ -131,13 +125,63 @@ export default {
         downloadPdf: function (bookId) {
             this.$store.dispatch("downloadPdf", bookId);
         },
+        toggle: function () {
+            this.showChapters = !this.showChapters;
+            if (this.showChapters) {
+                const dd = document.querySelector(
+                    ".chapter-title .dropdown-list"
+                );
+                setTimeout(() => {
+                    dd.scrollTop = 21 * this.chapterIndex;
+                });
+            }
+        },
+        onScroll: function () {
+            if (!this.book.chapters || !this.book.chapters.length) return;
+
+            const fromTop = window.scrollY + 60;
+            const chapters = document.querySelectorAll(".chapters .chapter");
+            for (let i = 0; i < chapters.length; i++) {
+                const section = chapters[i];
+
+                if (
+                    section.offsetTop <= fromTop &&
+                    section.offsetTop + section.offsetHeight > fromTop
+                ) {
+                    this.chapterIndex = i;
+                    return;
+                }
+            }
+        },
+        hideChpaterLinks: function (event) {
+            if (!this.$refs.chapterLink.contains(event.target)) {
+                this.showChapters = false;
+            }
+        },
     },
     beforeCreate() {
         this.$store.dispatch("loadChapters", this.id);
     },
+    mounted: function () {
+        document.addEventListener("click", this.hideChpaterLinks);
+    },
+    unmounted: function () {
+        document.removeEventListener("scroll", this.onScroll);
+        document.removeEventListener("click", this.hideChpaterLinks);
+    },
     watch: {
         $route(route) {
-            this.$store.dispatch("loadChapters", route.params.id);
+            if (route.params.id !== this.id) {
+                this.$store.dispatch("loadChapters", route.params.id);
+            }
+        },
+        book(_book) {
+            if (_book?.chapters?.length) {
+                setTimeout(() => {
+                    this.chapterIndex = 0;
+                    document.addEventListener("scroll", this.onScroll);
+                });
+            }
         },
     },
 };
@@ -147,10 +191,18 @@ h4 {
     margin: 2rem 0 1rem 1rem;
 }
 .book_details {
-    position: relative;
     min-height: 400px;
     &.loading::after {
         top: 200px;
+    }
+    .chapters > .chapter {
+        padding-top: 80px;
+        &:first-of-type {
+            padding-top: 50px;
+        }
+        h4 {
+            margin-top: 0;
+        }
     }
 }
 .book h2.title {
@@ -159,11 +211,78 @@ h4 {
     align-items: baseline;
     justify-content: space-between;
     position: sticky;
-    top: 50px;
+    top: 45px;
     background: var(--book-bg);
     opacity: 0.96;
+
+    a.chapter-link {
+        svg {
+            width: 12px;
+            height: 16px;
+            transition: all 0.1s ease-in-out;
+            transform-origin: 4px 6px;
+        }
+        &:hover svg {
+            transform: rotate(90deg);
+        }
+    }
+
+    .chapter-title {
+        margin-left: 0.2em;
+    }
+
+    .dropdown-list {
+        position: absolute;
+        text-align: left;
+        margin-top: -32px;
+        margin-left: -2px;
+        overflow-y: auto;
+        display: none;
+        height: 400px;
+        animation: fadein 0.5s linear normal;
+        background: #fff;
+        &.show {
+            display: block;
+        }
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        > div {
+            padding: 0 16px;
+            &:first-child {
+                margin-top: 8px;
+            }
+            &:hover {
+                background: var(--gray-dark);
+                a {
+                    color: #fff;
+                }
+            }
+        }
+
+        div.active {
+            background: var(--gray-dark);
+            a {
+                color: var(--light);
+            }
+        }
+        a:hover {
+            text-decoration: none;
+        }
+    }
 }
 .card {
     background: none;
+}
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 </style>
