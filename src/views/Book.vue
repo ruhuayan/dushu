@@ -170,7 +170,7 @@ export default {
     },
     watch: {
         $route(route) {
-            if (route.params.id !== this.id) {
+            if (route.params.id !== this.id && route.params.id) {
                 this.$store.dispatch("loadChapters", route.params.id);
             }
         },
