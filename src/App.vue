@@ -109,8 +109,15 @@ html {
         padding-bottom: 3rem;
     }
 
-    nav.navbar.scrolled ~ .container .book h2.title {
+    nav.navbar.scrolled ~ .container .book .book-intro {
         border-bottom: 1px solid;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        .book-intro_download .author_category {
+            display: none;
+        }
     }
     a.goUp {
         display: none;
@@ -138,6 +145,8 @@ html {
 }
 .container.loading {
     min-height: 600px;
+    height: 85vh;
+    overflow: hidden;
 }
 .book {
     margin-top: 1.5rem;

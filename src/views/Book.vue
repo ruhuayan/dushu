@@ -1,7 +1,7 @@
 <template>
     <div class="book" v-if="bookIntro">
-        <h2 class="title">
-            <span>
+        <div class="book-intro">
+            <h2 class="title">
                 {{ bookIntro.title }}
                 <a
                     v-if="book.chapters?.length"
@@ -35,20 +35,22 @@
                         </div>
                     </span>
                 </a>
-            </span>
-            <Downloadlink :book="bookIntro" />
-        </h2>
-        <authorlink
-            :author="bookIntro.author"
-            :category="bookIntro.category"
-            :category-cn="Categories[bookIntro.category]"
-        />
-        <div class="collapse" id="collapseIntro" :class="{ show: showIntro }">
-            <div class="card card-body">
-                {{ bookIntro.description }}
+            </h2>
+            <div class="book-intro_download">
+                <authorlink
+                    :author="bookIntro.author"
+                    :category="bookIntro.category"
+                    :category-cn="Categories[bookIntro.category]"
+                />
+                <Downloadlink :book="bookIntro" />
             </div>
         </div>
         <div class="book_details" :class="{ loading: bookLoading }">
+            <div class="collapse show" id="chapter_0">
+                <div class="card card-body">
+                    {{ bookIntro.description }}
+                </div>
+            </div>
             <div
                 class="chapters"
                 v-if="book.series?.length"
@@ -60,9 +62,9 @@
                     :key="serie.serie_title"
                 >
                     <div class="chapter_title">
-                        <router-link :to="`/book/${serie.serie_id}`">{{
-                            serie.serie_title
-                        }}</router-link>
+                        <router-link :to="`/book/${serie.serie_id}`">
+                            {{ serie.serie_title }}
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -97,7 +99,6 @@ export default {
     },
     data() {
         return {
-            showIntro: false,
             showChapters: false,
             chapterIndex: 0,
         };
@@ -191,6 +192,10 @@ h4 {
 }
 .book_details {
     min-height: 400px;
+    &.loading {
+        height: 85vh;
+        overflow: hidden;
+    }
     &.loading::after {
         top: 200px;
     }
@@ -204,81 +209,90 @@ h4 {
         }
     }
 }
-.book h2.title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
+.book .book-intro {
     position: sticky;
     top: 45px;
     background: var(--book-bg);
     opacity: 0.96;
-
-    a.chapter-link {
-        text-align: left;
-        svg {
-            width: 12px;
-            height: 16px;
-            transition: all 0.1s ease-in-out;
-            transform-origin: 4px 6px;
-        }
-        &:hover svg {
-            transform: rotate(90deg);
-        }
-    }
-
-    .chapter-title {
-        margin-left: 0.2em;
-    }
-
-    .dropdown-list {
-        position: absolute;
-        text-align: left;
-        margin-top: -32px;
-        margin-left: -2px;
-        overflow-y: auto;
-        display: none;
-        height: 400px;
-        animation: fadein 0.5s linear normal;
-        background: #fff;
-        max-width: 400px;
-        white-space: nowrap;
-        overflow-x: hidden;
-        &.show {
-            display: block;
-        }
-        &::-webkit-scrollbar {
-            width: 6px;
-        }
-        > div {
-            padding: 0 16px;
-            &:first-child {
-                margin-top: 8px;
+    h2.title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        margin-bottom: 0;
+        a.chapter-link {
+            text-align: left;
+            svg {
+                width: 12px;
+                height: 16px;
+                transition: all 0.1s ease-in-out;
+                transform-origin: 4px 6px;
             }
-            &:hover {
-                background: var(--gray-dark);
-                a {
-                    color: #fff;
+            &:hover svg {
+                transform: rotate(90deg);
+            }
+        }
+
+        .chapter-title {
+            margin-left: 0.2em;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            text-align: left;
+            margin-top: -32px;
+            margin-left: -2px;
+            overflow-y: auto;
+            display: none;
+            max-height: 400px;
+            animation: fadein 0.5s linear normal;
+            background: #fff;
+            max-width: 400px;
+            white-space: nowrap;
+            overflow-x: hidden;
+            z-index: 99;
+            &.show {
+                display: block;
+            }
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+            > div {
+                padding: 0 16px;
+                &:first-child {
+                    margin-top: 8px;
+                }
+                &:hover {
+                    background: var(--gray-dark);
+                    a {
+                        color: #fff;
+                    }
                 }
             }
-        }
 
-        div[id^="chapter-link_"] {
-            height: 21px;
-        }
-        div.active {
-            background: var(--gray-dark);
-            a {
-                color: var(--light);
+            div[id^="chapter-link_"] {
+                height: 21px;
+            }
+            div.active {
+                background: var(--gray-dark);
+                a {
+                    color: var(--light);
+                }
+            }
+            a:hover {
+                text-decoration: none;
             }
         }
-        a:hover {
-            text-decoration: none;
-        }
+    }
+    .book-intro_download {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
     }
 }
+
 .card {
     background: none;
+    position: unset;
 }
 @keyframes fadein {
     0% {
@@ -292,7 +306,7 @@ h4 {
     }
 }
 @media only screen and (max-width: 412px) {
-    .book h2.title {
+    .book-intro h2.title {
         flex-direction: column;
         a.chapter-link {
             display: block;
