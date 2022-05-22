@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 import { Http } from '../models/http-common';
 
 export const DUSHU = 'dushu';
+export const LEN = 10;
 
 export default createStore({
     state: {
@@ -20,7 +21,7 @@ export default createStore({
         book: (state) => state.book,
 
         mostDownloadedBooks: (state) => (page = 1, perPage = 10) => {
-            const books = [...state.books].sort((a, b) => b.download_ebook_count - a.download_ebook_count)
+            const books = [...state.books].sort((a, b) => b.e_count - a.e_count)
             return {
                 total: books.length,
                 selected: books.slice(perPage * (page - 1), perPage * page)
@@ -54,7 +55,7 @@ export default createStore({
         getBooksByQuery: (state) => (query, qtype = 'title', page = 1, perPage = 10) => {
             const regex = new RegExp(query, "gi");
             const books = state.books.filter(book => regex.test(book[qtype])).sort(
-                (a, b) => b.download_ebook_count - a.download_ebook_count
+                (a, b) => b.e_count - a.e_count
             );
             return {
                 total: books.length,
@@ -116,7 +117,7 @@ export default createStore({
                 } catch {
                     const res = await Http.get(`books.php?id=${payload}`);
                     data = res.data;
-                    if (dushu.length >=10) dushu.shift();
+                    if (dushu.length >= LEN) dushu.shift();
                     dushu.push({id: payload, data});
                     localStorage.setItem(DUSHU, JSON.stringify(dushu));
                 }

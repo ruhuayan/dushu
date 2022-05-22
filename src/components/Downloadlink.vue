@@ -2,8 +2,8 @@
     <div class="downloaded_count">
         <div class="download_ebook_count">
             Ebook下载次数: 
-            <span :class="{hasSeries: book.download_ebook_count === null}">
-                {{ book.download_ebook_count ?? '无下载记录' }}
+            <span :class="{hasSeries: book.e_count === null}">
+                {{ book.e_count ?? '无下载记录' }}
             </span>
             <a
                 :href="`/ebooks/${book.title}/${book.title}.mobi`"
@@ -18,8 +18,8 @@
         </div>
         <div class="download_pdf_count">
             PDF下载次数: 
-            <span :class="{hasSeries: book.download_pdf_count === null}">
-                {{ book.download_pdf_count ?? '无下载记录'  }}
+            <span :class="{hasSeries: book.pdf_count === null}">
+                {{ book.pdf_count ?? '无下载记录'  }}
             </span>
             <a
                 :href="`/ebooks/${book.title}/${book.title}.pdf`"

@@ -282,12 +282,12 @@ export default {
             const booksByTitle = this.books
                 .filter((book) => regex.test(book.title))
                 .sort(
-                    (a, b) => b.download_ebook_count - a.download_ebook_count
+                    (a, b) => b.e_count - a.e_count
                 );
             const booksByAuthor = this.books
                 .filter((book) => regex.test(book.author))
                 .sort(
-                    (a, b) => b.download_ebook_count - a.download_ebook_count
+                    (a, b) => b.e_count - a.e_count
                 );
             this.searchResult = {
                 title: booksByTitle,
