@@ -250,7 +250,7 @@ export default {
     },
     mounted: function () {
         document.addEventListener("click", this.onClose);
-        this.debouncedListener = debounced(this.searchFunc, 1000).bind(this);
+        this.debouncedListener = debounced(this.searchFunc, 300).bind(this);
     },
     unmounted: function () {
         document.removeEventListener("click", this.onClose);
@@ -269,7 +269,7 @@ export default {
             setTimeout(() => (this.closeSearch = true), 500);
         },
         onInputChange: function () {
-            // debounced - 1s
+            // debounced - .3s
             this.debouncedListener();
         },
         searchFunc: function () {
@@ -295,7 +295,7 @@ export default {
             };
 
             this.matchedBooks = this.searchResult[this.searchType];
-            this.$store.dispatch("searchBook", this.searchQuery);
+            // this.$store.dispatch("searchBook", this.searchQuery);
         },
         setSearchType: function (type) {
             this.searchType = type;

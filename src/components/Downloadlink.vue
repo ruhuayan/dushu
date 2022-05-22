@@ -1,7 +1,10 @@
 <template>
     <div class="downloaded_count">
         <div class="download_ebook_count">
-            Ebook下载次数: <span>{{ book.download_ebook_count }}</span>
+            Ebook下载次数: 
+            <span :class="{hasSeries: book.download_ebook_count === null}">
+                {{ book.download_ebook_count ?? '无下载记录' }}
+            </span>
             <a
                 :href="`/ebooks/${book.title}/${book.title}.mobi`"
                 target="_blank"
@@ -14,7 +17,10 @@
             </a>
         </div>
         <div class="download_pdf_count">
-            PDF下载次数: <span>{{ book.download_pdf_count }}</span>
+            PDF下载次数: 
+            <span :class="{hasSeries: book.download_pdf_count === null}">
+                {{ book.download_pdf_count ?? '无下载记录'  }}
+            </span>
             <a
                 :href="`/ebooks/${book.title}/${book.title}.pdf`"
                 target="_blank"
@@ -47,3 +53,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+span.hasSeries + a {
+    display: none;
+}
+</style>

@@ -154,7 +154,7 @@ export default {
             }
         },
         hideChpaterLinks: function (event) {
-            if (!this.$refs.chapterLink.contains(event.target)) {
+            if (this.$refs.chapterLink && !this.$refs.chapterLink.contains(event.target)) {
                 this.showChapters = false;
             }
         },

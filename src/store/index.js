@@ -1,6 +1,8 @@
 import { createStore } from 'vuex';
 import { Http } from '../models/http-common';
 
+export const DUSHU = 'dushu';
+
 export default createStore({
     state: {
         loading: false,
@@ -99,9 +101,27 @@ export default createStore({
             if (!state.bookLoading) {
                 commit('SET_BOOK_LOADING', true);
 
-                const res = await Http.get(`books.php?id=${payload}`);
+                const d = localStorage.getItem(DUSHU);
+                let data = null, dushu = [];
+                try {
+                    dushu = JSON.parse(d) ?? [];
+                    const index = dushu.findIndex(book => book.id === payload);
+                    if (index < 0) throw 'Not Found';
 
-                commit('SAVE_BOOK', res.data, payload);
+                    const book = dushu[index];
+                    data = book.data;
+                    dushu.splice(index, 1);
+                    dushu.push(book);
+                    localStorage.setItem(DUSHU, JSON.stringify(dushu));
+                } catch {
+                    const res = await Http.get(`books.php?id=${payload}`);
+                    data = res.data;
+                    if (dushu.length >=10) dushu.shift();
+                    dushu.push({id: payload, data});
+                    localStorage.setItem(DUSHU, JSON.stringify(dushu));
+                }
+
+                commit('SAVE_BOOK', data, payload);
                 commit('SET_BOOK_LOADING', false);
             }
         },
