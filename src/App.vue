@@ -4,7 +4,7 @@
         <router-view />
     </div>
     <Footer />
-    <a class="btn goUp" @click="goUp">
+    <span class="btn goUp" @click="goUp">
         <svg width="24" height="12" viewBox="0 0 80 40">
             <polyline
                 fill="none"
@@ -15,7 +15,7 @@
                 points="1,36 39,1 79, 36"
             />
         </svg>
-    </a>
+    </span>
     <svg display="none">
         <symbol width="14" height="14" viewBox="0 0 24 24" id="download">
             <path
@@ -119,7 +119,7 @@ html {
             display: none;
         }
     }
-    a.goUp {
+    .goUp {
         display: none;
         position: fixed;
         bottom: 20px;
@@ -130,7 +130,7 @@ html {
         cursor: pointer;
         background: rgba(250, 235, 208, 0.5);
     }
-    nav.navbar.scrolled ~ a.goUp {
+    nav.navbar.scrolled ~ .goUp {
         display: block;
     }
     .goUp:hover polyline,
