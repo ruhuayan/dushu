@@ -59,6 +59,7 @@ export default {
             default: "Next",
         },
     },
+    emits: ['pageChange'],
     computed: {
         max() {
             return Math.ceil(this.total / this.perPage);

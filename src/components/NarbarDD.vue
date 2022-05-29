@@ -67,3 +67,12 @@ export default {
     },
 };
 </script>
+<style scoped>
+
+@media (max-width: 991px) {
+    .dropdown-menu {
+        position: absolute !important;
+        width: 100%;
+    }
+}
+</style>

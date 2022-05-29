@@ -73,11 +73,12 @@ export default createStore({
         SET_BOOK_LOADING(state, loading) {
             state.bookLoading = loading;
         },
-        SAVE_BOOK(state, payload, bookId) {
+        SAVE_BOOK(state, payload) {
+            const { id, data } = payload;
             const book = {
-                id: bookId,
-                series: payload.series ? payload.series : [],
-                chapters: payload.chapters ? payload.chapters : []
+                id,
+                series: data.series ? data.series : [],
+                chapters: data.chapters ? data.chapters : []
             }
             state.book = book;
         },
@@ -121,8 +122,7 @@ export default createStore({
                     dushu.push({id: payload, data});
                     localStorage.setItem(DUSHU, JSON.stringify(dushu));
                 }
-
-                commit('SAVE_BOOK', data, payload);
+                commit('SAVE_BOOK', {id: payload, data});
                 commit('SET_BOOK_LOADING', false);
             }
         },

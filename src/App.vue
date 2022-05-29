@@ -227,18 +227,20 @@ html {
 }
 
 /* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 10px;
-}
+@media (min-width: 991px) {
+    *::-webkit-scrollbar {
+        width: 10px;
+    }
 
-*::-webkit-scrollbar-track {
-    background: #fff;
-}
+    *::-webkit-scrollbar-track {
+        background: #fff;
+    }
 
-*::-webkit-scrollbar-thumb {
-    background-color: var(--gray);
-    border-radius: 5px;
-    border: 1px solid var(--book-bg);
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--gray);
+        border-radius: 5px;
+        border: 1px solid var(--book-bg);
+    }
 }
 
 .dropdown-list {

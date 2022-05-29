@@ -107,12 +107,9 @@ export default {
         return this.bookIntro?.title;
     },
     computed: {
-        ...mapState(["bookLoading"]),
+        ...mapState(["bookLoading", 'book']),
         bookIntro() {
             return this.$store.getters["getBookIntroById"](this.id);
-        },
-        book() {
-            return this.$store.getters["book"];
         },
         Categories() {
             return Categories;
@@ -164,6 +161,10 @@ export default {
     },
     mounted: function () {
         document.addEventListener("click", this.hideChpaterLinks);
+        setTimeout(() => {
+            this.chapterIndex = 0;
+            document.addEventListener("scroll", this.onScroll);
+        });
     },
     unmounted: function () {
         document.removeEventListener("scroll", this.onScroll);
@@ -173,14 +174,6 @@ export default {
         $route(route) {
             if (route.params.id !== this.id && route.params.id) {
                 this.$store.dispatch("loadChapters", route.params.id);
-            }
-        },
-        book(_book) {
-            if (_book?.chapters?.length) {
-                setTimeout(() => {
-                    this.chapterIndex = 0;
-                    document.addEventListener("scroll", this.onScroll);
-                });
             }
         },
     },

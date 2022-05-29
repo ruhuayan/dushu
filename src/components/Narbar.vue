@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" ref="navbar">
         <router-link class="navbar-brand" to="/">
             <img
                 class="dushuIcon"
@@ -216,9 +216,14 @@ form .search {
 @media (max-width: 991px) {
     form.form-inline {
         justify-content: space-between;
+        position: relative;
         input.form-control {
             flex: 1;
         }
+    }
+    .dropdown-list {
+        width: 100%;
+        top: 45px;
     }
 }
 </style>
@@ -320,6 +325,21 @@ export default {
                 this.ddShow = !this.ddShow;
             } else {
                 this.ddShow = false;
+            }
+
+            if (this.menuOpen && !this.$refs.navbar.contains(event.target)) {
+                this.menuOpen = false;
+            }
+        },
+    },
+    watch: {
+        $route(route) {
+            if (route.name !== 'Book') {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+            if (this.menuOpen) {
+                this.menuOpen = false;
             }
         },
     },
