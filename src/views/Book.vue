@@ -101,6 +101,7 @@ export default {
         return {
             showChapters: false,
             chapterIndex: 0,
+            scrollY: 0,
         };
     },
     title() {
@@ -161,10 +162,9 @@ export default {
     },
     mounted: function () {
         document.addEventListener("click", this.hideChpaterLinks);
-        setTimeout(() => {
-            this.chapterIndex = 0;
-            document.addEventListener("scroll", this.onScroll);
-        });
+    },
+    beforeUnmount: function () {
+        this.$store.dispatch('setBookScrollY', {id: this.id, scrollY: window.scrollY});
     },
     unmounted: function () {
         document.removeEventListener("scroll", this.onScroll);
@@ -176,6 +176,14 @@ export default {
                 this.$store.dispatch("loadChapters", route.params.id);
             }
         },
+        book(newBook) {
+            if (newBook.chapters?.length) {
+                setTimeout(() => {
+                    document.addEventListener("scroll", this.onScroll);
+                    window.scrollTo(0, newBook.scrollY ?? 0);
+                });
+            }
+        }
     },
 };
 </script>

@@ -255,7 +255,7 @@ export default {
     },
     mounted: function () {
         document.addEventListener("click", this.onClose);
-        this.debouncedListener = debounced(this.searchFunc, 300).bind(this);
+        this.debouncedListener = debounced(this.searchFunc, 100);
     },
     unmounted: function () {
         document.removeEventListener("click", this.onClose);

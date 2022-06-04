@@ -2,6 +2,6 @@ export const debounced = function (func, timeout = 100) {
     let timer;
     return (...args) => {
         clearTimeout(timer);
-        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        timer = setTimeout(function () { func.apply(this, args); }, timeout);
     };
 }

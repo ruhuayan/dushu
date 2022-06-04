@@ -13,6 +13,7 @@ export default createStore({
             id: null,
             chapters: [],
             series: [],
+            scrollY: 0,
         }
     },
     getters: {
@@ -74,8 +75,8 @@ export default createStore({
             state.bookLoading = loading;
         },
         SAVE_BOOK(state, payload) {
-            const { id, chapters = [], series = [] } = payload;
-            state.book = { id, chapters, series };
+            const { id, data, scrollY = null } = payload;
+            state.book = { id, ...data, scrollY };
         },
         UPDATE_BOOK(state, payload) {
             let book = state.books.find(book => book.id == payload.id);
@@ -99,25 +100,25 @@ export default createStore({
                 commit('SET_BOOK_LOADING', true);
 
                 const d = localStorage.getItem(DUSHU);
-                let data = null, dushu = [];
+                let dushu = [];
+                const book = { id: payload, scrollY: 0 };
                 try {
-                    dushu = JSON.parse(d) ?? [];
-                    const index = dushu.findIndex(book => book.id === payload);
-                    if (index < 0) throw 'Not Found';
+                    dushu = await JSON.parse(d) ?? [];
+                    const idx = dushu.findIndex(book => book.id === payload);
+                    if (idx < 0) throw 'Not Found';
 
-                    const book = dushu[index];
-                    data = book.data;
-                    dushu.splice(index, 1);
+                    Object.assign(book, dushu[idx]);
+                    dushu.splice(idx, 1);
                     dushu.push(book);
                     localStorage.setItem(DUSHU, JSON.stringify(dushu));
                 } catch {
                     const res = await Http.get(`books.php?id=${payload}`);
-                    data = res.data;
+                    book.data = res.data;
                     if (dushu.length >= LEN) dushu.shift();
-                    dushu.push({id: payload, data});
+                    dushu.push(book);
                     localStorage.setItem(DUSHU, JSON.stringify(dushu));
                 }
-                commit('SAVE_BOOK', { id: payload, ...data });
+                commit('SAVE_BOOK', book);
                 commit('SET_BOOK_LOADING', false);
             }
         },
@@ -131,6 +132,20 @@ export default createStore({
         },
         searchBook(_, payload) {
             Http.get(`q?book=${payload}`);
+        },
+        setBookScrollY(_, payload) {
+            try {
+                const d = localStorage.getItem(DUSHU);
+                const dushu = JSON.parse(d) ?? [];
+                const book = dushu.find(b => b.id === payload.id);
+                if (!book) throw `Book (${payload.id}) not found`;
+
+                Object.assign(book, payload);
+
+                localStorage.setItem(DUSHU, JSON.stringify(dushu));
+            } catch(e) {
+                console.error(e)
+            }
         }
     }
 })
