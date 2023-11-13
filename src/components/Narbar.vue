@@ -3,7 +3,7 @@
         <router-link class="navbar-brand" to="/">
             <img
                 class="dushuIcon"
-                src="img/dushu296x240.png"
+                src="/img/dushu296x240.png"
                 alt="Dushu icon"
             />
         </router-link>
