@@ -7,14 +7,14 @@ function getTitle(vm) {
 export default {
     created() {
         const title = getTitle(this);
-        if (title) {
+        if (title && typeof document !== 'undefined') {
             document.title = title;
         }
     },
     watch: {
         $route() {
             const title = getTitle(this);
-            if (title) {
+            if (title && typeof document !== 'undefined') {
                 document.title = title;
             }
         },
